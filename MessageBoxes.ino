@@ -185,5 +185,3 @@ void drawMessageBox(String message, byte lines, bool waitForButtonPress, byte re
   }
 
 }
-
-

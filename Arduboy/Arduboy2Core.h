@@ -219,6 +219,7 @@
 
 #define WIDTH 128 /**< The width of the display in pixels */
 #define HEIGHT 64 /**< The height of the display in pixels */
+#define DEFAULT_VERT_SPACING 12 //SJH
 
 #define COLUMN_ADDRESS_END (WIDTH - 1) & 127   // 128 pixels wide
 #define PAGE_ADDRESS_END ((HEIGHT/8)-1) & 7    // 8 pages high

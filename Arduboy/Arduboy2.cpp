@@ -1107,9 +1107,9 @@ void Arduboy2Base::swap(int16_t& a, int16_t& b)
 
 Arduboy2::Arduboy2()
 {
-  cursor_wrap_leftPos = 0;				// SJH
-  cursor_wrap_rightPos = WIDTH;			// SJH
-  vert_spacing = 12;					// SJH
+  cursor_wrap_leftPos = 0;				      // SJH
+  cursor_wrap_rightPos = WIDTH;			      // SJH
+  vert_spacing = DEFAULT_VERT_SPACING;		  // SJH
   cursor_x = 0;
   cursor_y = 0;
   textColor = 1;
