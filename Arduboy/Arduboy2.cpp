@@ -1107,8 +1107,9 @@ void Arduboy2Base::swap(int16_t& a, int16_t& b)
 
 Arduboy2::Arduboy2()
 {
-  cursor_x_wrap = 0;			// SJH
-  vert_spacing = 8;				// SJH
+  cursor_wrap_leftPos = 0;				// SJH
+  cursor_wrap_rightPos = WIDTH;			// SJH
+  vert_spacing = 12;					// SJH
   cursor_x = 0;
   cursor_y = 0;
   textColor = 1;
@@ -1195,9 +1196,9 @@ size_t Arduboy2::write(uint8_t c)
   if (c == '\n')
   {
     /* cursor_y += textSize * 8; */ 		// SJH
-    cursor_y += textSize * vert_spacing;	// SJH
+    cursor_y += (textSize * vert_spacing);	// SJH
     /* cursor_x = 0; */ 					// SJH
-    cursor_x = cursor_x_wrap; 				// SJH
+    cursor_x = cursor_wrap_leftPos; 		// SJH
   }
   else if (c == '\r')
   {
@@ -1207,7 +1208,8 @@ size_t Arduboy2::write(uint8_t c)
   {
     drawChar(cursor_x, cursor_y, c, textColor, textBackground, textSize);
     cursor_x += textSize * 6;
-    if (textWrap && (cursor_x > (WIDTH - textSize * 6)))
+    /* if (c == '\n' || textWrap && (cursor_x > (WIDTH - textSize * 6))) */      // SJH
+    if (c == '\n' || textWrap && (cursor_x > (cursor_wrap_rightPos - textSize * 6))) 
     {
       // calling ourselves recursively for 'newline' is
       // 12 bytes smaller than doing the same math here
@@ -1294,16 +1296,18 @@ void Arduboy2::setTextWrap(bool w)
 }
 
 /* SJH */
-void Arduboy2::setTextWrap(bool w, int16_t x)
+void Arduboy2::setTextWrap(bool w, int16_t l, int16_t r)
 {
   textWrap = w;
-  cursor_x_wrap = x;
+  cursor_wrap_leftPos = l;
+  cursor_wrap_rightPos = r;
 }
 
 /* SJH */
-void Arduboy2::setTextWrapXPos(int16_t x)
+void Arduboy2::setTextWrapPositions(int16_t l, int16_t r)
 {
-  cursor_x_wrap = x;
+  cursor_wrap_leftPos = l;
+  cursor_wrap_rightPos = r;
 }
 
 

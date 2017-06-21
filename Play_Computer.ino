@@ -11,7 +11,7 @@ void computersHand_Loop() {
   players_hand_visible_idx = 0;
   board_highlighted_idx = NOTHING;
 
-  while (gameState == STATE_GAME_PLAY_HUMAN) {
+  while (gameState == STATE_GAME_PLAY_COMPUTER) {
 
     bool drawBone = false;
 
@@ -43,12 +43,12 @@ void computersHand_Loop() {
       else {
 
     	  
-        // No tiles can be played so draw ..
+        // No bones can be played so draw ..
 
         if (bones_available_idx > 0) {
 
           players_hand[PLAYER_COMPUTER][players_hand_idx[PLAYER_COMPUTER]] = bones_available[bones_available_idx];
-          drawMessageBox("I will draw\na bone.", 2);
+          drawMessageBox("I will draw  a bone.", 2, false);
 
           players_hand_idx[PLAYER_COMPUTER] = players_hand_idx[PLAYER_COMPUTER] + 1;
           bones_available_idx--;
@@ -57,19 +57,19 @@ void computersHand_Loop() {
           drawBone = true;
         
         }
-        else {  // No tiles to draw so pass ..
+        else {  // No bones to draw so pass ..
 
-          gameState = (canPlay(PLAYER_HUMAN) ? STATE_GAME_PLAY_HUMAN : STATE_GAME_PLAY_GAME);
+          gameState = (canPlay(PLAYER_HUMAN) ? STATE_GAME_PLAY_COMPUTER : STATE_GAME_PLAY_GAME);
 
-          if (gameState == STATE_GAME_PLAY_HUMAN) {
+          if (gameState == STATE_GAME_PLAY_COMPUTER) {
 
-            drawMessageBox("I cannot go\nI will have\nto pass.", 3);
+            drawMessageBox("I cannot go. I will have to pass.", 3, true);
             gameState == STATE_GAME_PLAY_HUMAN_HAND_SEL;
 
           }
           else {
 
-            drawMessageBox("No one can\nplay. This\nis a draw.", 3);
+            drawMessageBox("No one can play. This is a draw.", 3, true);
 
           }
 
@@ -86,17 +86,23 @@ void computersHand_Loop() {
     // Pass control to the human if the game is still in play or finish the game ..
     
     if (!drawBone) {
+
+      gameState = (isAnyoneOut() ? STATE_GAME_PLAY_GAME : gameState);
       gameState = (isTheGameOver() ? STATE_GAME_INTRO : gameState);
-      if (gameState != STATE_GAME_INTRO) {
-        gameState = (isAnyoneOut() ? STATE_GAME_PLAY_GAME : gameState);
+
+      if (gameState == STATE_GAME_PLAY_COMPUTER) {
+        gameState = (canEitherPlayerMove() ? STATE_GAME_PLAY_HUMAN_HAND_SEL: STATE_GAME_PLAY_COMPUTER);
       }
-      if (gameState != STATE_GAME_PLAY_GAME) {
-        gameState = (canEitherPlayerMove() ? STATE_GAME_PLAY_HUMAN_HAND_SEL: STATE_GAME_PLAY_HUMAN);
-      }
+      
     }
     
     delay(100);
   
   }
+
+
+  // The playersTurn variable is used to record whose turn it is between rounds ..
+  
+  playersTurn = PLAYER_HUMAN;
 
 }

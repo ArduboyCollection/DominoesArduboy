@@ -2,8 +2,8 @@
  *  The computer will attempt to:
  *  
  *  1)  Play a domino that scores.
- *  2)  Play a domino that blocks an end of the play using a tile whose pips are 
- *      fully visible in the his hand or the 'used' tiles. 
+ *  2)  Play a domino that blocks an end of the play using a bone whose pips are 
+ *      fully visible in the his hand or the 'used' boness. 
  *  3)  Play a domino that reduces the pip count thus preventing other players
  *      scoring highly. 
  *  
@@ -35,6 +35,7 @@ void highestPossibleScore(byte player, byte *retIndex, byte *retDirection) {
       switch (boardMode) {
       
         case BOARD_MODE_NO_BONES_PLAYED:
+          highestPossibleScore_CenterOnly(x, leftPips, rightPips, &retValue, retIndex, retDirection);
           break;
           
         case BOARD_MODE_ONE_BONE_PLAYED:
@@ -195,6 +196,25 @@ void highestPossibleScore_Center(byte boneIdx, byte pips, byte *retValue, byte *
       (bone_w_pips_outer + bone_e_pips_outer + (bone_n != NOTHING ? bone_n_pips_outer : 0) + pips) > *retValue) {  
     *retValue = (bone_w_pips_outer + bone_e_pips_outer + (bone_n != NOTHING ? bone_n_pips_outer : 0) + pips); 
     *retDirection = SOUTH;
+    *retIndex = boneIdx;
+  }
+
+}
+
+
+/* ----------------------------------------------------------------------------
+ *  Calculate the best score-producing hand (Center Only).
+ *  
+ *  Can the nominated bone be played in the West position against the centre 
+ *  bone? If so, will it result in a score that is lower than all previously 
+ *  calculated ones ??  
+ *    
+ */
+void highestPossibleScore_CenterOnly(byte boneIdx, byte leftPips, byte rightPips, byte *retValue, byte *retIndex, byte *retDirection) {
+
+  if ((leftPips + rightPips) % 5 == 0 && (leftPips + rightPips) > *retValue) { 
+    *retValue = (leftPips + rightPips); 
+    *retDirection = CENTER;
     *retIndex = boneIdx;
   }
 
@@ -374,23 +394,24 @@ void lowestPossibleScore(byte player, byte *retIndex, byte *retDirection) {
     switch (boardMode) {
       
       case BOARD_MODE_NO_BONES_PLAYED:
+        lowestPossibleScore_CenterOnly(x, leftPips, rightPips, &retValue, retIndex, retDirection);
         break;
           
       case BOARD_MODE_ONE_BONE_PLAYED:
 
-        if (bone_c_pips_outer == leftPips)      { lowestPossibleScore_East(isDouble, x, player, rightPips, &retValue, retIndex, retDirection); }
-        if (bone_c_pips_outer == rightPips)     { lowestPossibleScore_East(isDouble, x, player, leftPips, &retValue, retIndex, retDirection); }
-        if (bone_c_pips_inner == leftPips)      { lowestPossibleScore_West(isDouble, x, player, rightPips, &retValue, retIndex, retDirection); }
-        if (bone_c_pips_inner == rightPips)     { lowestPossibleScore_West(isDouble, x, player, leftPips, &retValue, retIndex, retDirection); }
+        if (bone_c_pips_outer == leftPips)      { lowestPossibleScore_East(isDouble, x, rightPips, &retValue, retIndex, retDirection); }
+        if (bone_c_pips_outer == rightPips)     { lowestPossibleScore_East(isDouble, x, leftPips, &retValue, retIndex, retDirection); }
+        if (bone_c_pips_inner == leftPips)      { lowestPossibleScore_West(isDouble, x, rightPips, &retValue, retIndex, retDirection); }
+        if (bone_c_pips_inner == rightPips)     { lowestPossibleScore_West(isDouble, x, leftPips, &retValue, retIndex, retDirection); }
           
         break;
 
       case BOARD_MODE_TWO_BONES_PLAYED:
          
-        if (bone_c_pips_outer == leftPips)      { lowestPossibleScore_Center(x, player, rightPips, &retValue, retIndex, retDirection); }
-        if (bone_c_pips_outer == rightPips)     { lowestPossibleScore_Center(x, player, leftPips, &retValue, retIndex, retDirection); }
-        if (bone_w_pips_outer == leftPips)      { lowestPossibleScore_West(isDouble, x, player, rightPips, &retValue, retIndex, retDirection); }
-        if (bone_w_pips_outer == rightPips)     { lowestPossibleScore_West(isDouble, x, player, leftPips, &retValue, retIndex, retDirection); }
+        if (bone_c_pips_outer == leftPips)      { lowestPossibleScore_Center(x, rightPips, &retValue, retIndex, retDirection); }
+        if (bone_c_pips_outer == rightPips)     { lowestPossibleScore_Center(x, leftPips, &retValue, retIndex, retDirection); }
+        if (bone_w_pips_outer == leftPips)      { lowestPossibleScore_West(isDouble, x, rightPips, &retValue, retIndex, retDirection); }
+        if (bone_w_pips_outer == rightPips)     { lowestPossibleScore_West(isDouble, x, leftPips, &retValue, retIndex, retDirection); }
           
         break;
         
@@ -398,34 +419,34 @@ void lowestPossibleScore(byte player, byte *retIndex, byte *retDirection) {
        
         if (bone_e != NOTHING) { 
 
-          if (bone_e_pips_outer == leftPips)    { lowestPossibleScore_East(isDouble, x, player, rightPips, &retValue, retIndex, retDirection); }
-          if (bone_e_pips_outer == rightPips)   { lowestPossibleScore_East(isDouble, x, player, leftPips, &retValue, retIndex, retDirection); }
+          if (bone_e_pips_outer == leftPips)    { lowestPossibleScore_East(isDouble, x, rightPips, &retValue, retIndex, retDirection); }
+          if (bone_e_pips_outer == rightPips)   { lowestPossibleScore_East(isDouble, x, leftPips, &retValue, retIndex, retDirection); }
          
         }
         else {
 
-          if (bone_c_pips_outer == leftPips)    { lowestPossibleScore_East(isDouble, x, player, rightPips, &retValue, retIndex, retDirection); }
-          if (bone_c_pips_outer == rightPips)   { lowestPossibleScore_East(isDouble, x, player, leftPips, &retValue, retIndex, retDirection); }
+          if (bone_c_pips_outer == leftPips)    { lowestPossibleScore_East(isDouble, x, rightPips, &retValue, retIndex, retDirection); }
+          if (bone_c_pips_outer == rightPips)   { lowestPossibleScore_East(isDouble, x, leftPips, &retValue, retIndex, retDirection); }
 
         }
 
         if (bone_w != NOTHING) { 
 
-          if (bone_w_pips_outer == leftPips)    { lowestPossibleScore_West(isDouble, x, player, rightPips, &retValue, retIndex, retDirection); }
-          if (bone_w_pips_outer == rightPips)   { lowestPossibleScore_West(isDouble, x, player, leftPips, &retValue, retIndex, retDirection); }
+          if (bone_w_pips_outer == leftPips)    { lowestPossibleScore_West(isDouble, x, rightPips, &retValue, retIndex, retDirection); }
+          if (bone_w_pips_outer == rightPips)   { lowestPossibleScore_West(isDouble, x, leftPips, &retValue, retIndex, retDirection); }
          
         }
         else {
 
-          if (bone_c_pips_outer == leftPips)    { lowestPossibleScore_West(isDouble, x, player, rightPips, &retValue, retIndex, retDirection); }
-          if (bone_c_pips_outer == rightPips)   { lowestPossibleScore_West(isDouble, x, player, leftPips, &retValue, retIndex, retDirection); }
+          if (bone_c_pips_outer == leftPips)    { lowestPossibleScore_West(isDouble, x, rightPips, &retValue, retIndex, retDirection); }
+          if (bone_c_pips_outer == rightPips)   { lowestPossibleScore_West(isDouble, x, leftPips, &retValue, retIndex, retDirection); }
 
         }
         
         if (bone_w == NOTHING && bone_e == NOTHING) { // Center is occupied but the east and the west are empty ..
 
-          if (bone_c_pips_outer == leftPips)    { lowestPossibleScore_West(isDouble, x, player, rightPips, &retValue, retIndex, retDirection); }
-          if (bone_c_pips_outer == rightPips)   { lowestPossibleScore_West(isDouble, x, player, leftPips, &retValue, retIndex, retDirection); }
+          if (bone_c_pips_outer == leftPips)    { lowestPossibleScore_West(isDouble, x, rightPips, &retValue, retIndex, retDirection); }
+          if (bone_c_pips_outer == rightPips)   { lowestPossibleScore_West(isDouble, x, leftPips, &retValue, retIndex, retDirection); }
 
         }          
 
@@ -433,34 +454,34 @@ void lowestPossibleScore(byte player, byte *retIndex, byte *retDirection) {
     
       case BOARD_MODE_X_AXIS_PLAYED:
        
-        if (bone_e_pips_outer == leftPips)      { lowestPossibleScore_East(isDouble, x, player, rightPips, &retValue, retIndex, retDirection); }
-        if (bone_e_pips_outer == rightPips)     { lowestPossibleScore_East(isDouble, x, player, leftPips, &retValue, retIndex, retDirection); }
-        if (bone_w_pips_outer == leftPips)      { lowestPossibleScore_West(isDouble, x, player, rightPips, &retValue, retIndex, retDirection); }
-        if (bone_w_pips_outer == rightPips)     { lowestPossibleScore_West(isDouble, x, player, leftPips, &retValue, retIndex, retDirection); }
+        if (bone_e_pips_outer == leftPips)      { lowestPossibleScore_East(isDouble, x, rightPips, &retValue, retIndex, retDirection); }
+        if (bone_e_pips_outer == rightPips)     { lowestPossibleScore_East(isDouble, x, leftPips, &retValue, retIndex, retDirection); }
+        if (bone_w_pips_outer == leftPips)      { lowestPossibleScore_West(isDouble, x, rightPips, &retValue, retIndex, retDirection); }
+        if (bone_w_pips_outer == rightPips)     { lowestPossibleScore_West(isDouble, x, leftPips, &retValue, retIndex, retDirection); }
 
         if (bone_n != NOTHING) { // North ..
          
-          if (bone_n_pips_outer == leftPips)    { lowestPossibleScore_North(x, player, rightPips, &retValue, retIndex, retDirection); }
-          if (bone_n_pips_outer == rightPips)   { lowestPossibleScore_North(x, player, leftPips, &retValue, retIndex, retDirection); }
+          if (bone_n_pips_outer == leftPips)    { lowestPossibleScore_North(x, rightPips, &retValue, retIndex, retDirection); }
+          if (bone_n_pips_outer == rightPips)   { lowestPossibleScore_North(x, leftPips, &retValue, retIndex, retDirection); }
           
         }
         else {
          
-          if (bone_c_pips_outer == leftPips)    { lowestPossibleScore_North(x, player, rightPips, &retValue, retIndex, retDirection); }
-          if (bone_c_pips_outer == rightPips)   { lowestPossibleScore_North(x, player, leftPips, &retValue, retIndex, retDirection); }
+          if (bone_c_pips_outer == leftPips)    { lowestPossibleScore_North(x, rightPips, &retValue, retIndex, retDirection); }
+          if (bone_c_pips_outer == rightPips)   { lowestPossibleScore_North(x, leftPips, &retValue, retIndex, retDirection); }
         
         }
 
         if (bone_s != NOTHING) { // South ..
           
-          if (bone_s_pips_outer == leftPips)    { lowestPossibleScore_South(x, player, rightPips, &retValue, retIndex, retDirection); }
-          if (bone_s_pips_outer == rightPips)   { lowestPossibleScore_South(x, player, leftPips, &retValue, retIndex, retDirection); }
+          if (bone_s_pips_outer == leftPips)    { lowestPossibleScore_South(x, rightPips, &retValue, retIndex, retDirection); }
+          if (bone_s_pips_outer == rightPips)   { lowestPossibleScore_South(x, leftPips, &retValue, retIndex, retDirection); }
           
         }
         else {
           
-          if (bone_c_pips_outer == leftPips)    { lowestPossibleScore_North(x, player, rightPips, &retValue, retIndex, retDirection); }
-          if (bone_c_pips_outer == rightPips)   { lowestPossibleScore_North(x, player, leftPips, &retValue, retIndex, retDirection); }
+          if (bone_c_pips_outer == leftPips)    { lowestPossibleScore_North(x, rightPips, &retValue, retIndex, retDirection); }
+          if (bone_c_pips_outer == rightPips)   { lowestPossibleScore_North(x, leftPips, &retValue, retIndex, retDirection); }
         
         }
 
@@ -482,10 +503,10 @@ void lowestPossibleScore(byte player, byte *retIndex, byte *retDirection) {
  *  are preferred to non-blocking moves.
  *    
  */
-void lowestPossibleScore_North(byte boneIdx, byte player, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
+void lowestPossibleScore_North(byte boneIdx, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
     
-  if (canBlock(player, pips) || bone_w_pips_outer + bone_e_pips_outer + (bone_s != NOTHING ? bone_s_pips_outer : 0) + pips < *retValue) { 
-    *retValue = canBlock(player, pips) ? 0 : (bone_w_pips_outer + bone_e_pips_outer + (bone_s != NOTHING ? bone_s_pips_outer : 0) + pips); 
+  if (canBlock(pips) || bone_w_pips_outer + bone_e_pips_outer + (bone_s != NOTHING ? bone_s_pips_outer : 0) + pips < *retValue) { 
+    *retValue = canBlock(pips) ? 0 : (bone_w_pips_outer + bone_e_pips_outer + (bone_s != NOTHING ? bone_s_pips_outer : 0) + pips); 
     *retDirection = NORTH;
     *retIndex = boneIdx;
   }
@@ -502,10 +523,10 @@ void lowestPossibleScore_North(byte boneIdx, byte player, byte pips, byte *retVa
  *  are preferred to non-blocking moves.
  *    
  */
-void lowestPossibleScore_South(byte boneIdx, byte player, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
+void lowestPossibleScore_South(byte boneIdx, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
 
-  if (canBlock(player, pips) || bone_w_pips_outer + bone_e_pips_outer + (bone_n != NOTHING ? bone_n_pips_outer : 0) + pips < *retValue) {  
-    *retValue = canBlock(player, pips) ? 0 : (bone_w_pips_outer + bone_e_pips_outer + (bone_n != NOTHING ? bone_n_pips_outer : 0) + pips); 
+  if (canBlock(pips) || bone_w_pips_outer + bone_e_pips_outer + (bone_n != NOTHING ? bone_n_pips_outer : 0) + pips < *retValue) {  
+    *retValue = canBlock(pips) ? 0 : (bone_w_pips_outer + bone_e_pips_outer + (bone_n != NOTHING ? bone_n_pips_outer : 0) + pips); 
     *retDirection = SOUTH;
     *retIndex = boneIdx;
   }
@@ -522,16 +543,35 @@ void lowestPossibleScore_South(byte boneIdx, byte player, byte pips, byte *retVa
  *  are preferred to non-blocking moves.
  *    
  */
-void lowestPossibleScore_Center(byte boneIdx, byte player, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
+void lowestPossibleScore_Center(byte boneIdx, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
 
-  if (canBlock(player, pips) || bone_w_pips_outer + pips < *retValue) { 
-    *retValue = (canBlock(player, pips) ? 0 : bone_w_pips_outer + pips);
+  if (canBlock(pips) || bone_w_pips_outer + pips < *retValue) { 
+    *retValue = (canBlock(pips) ? 0 : bone_w_pips_outer + pips);
     *retDirection = CENTER;
     *retIndex = boneIdx;
   }
   
 }
 
+
+/* ----------------------------------------------------------------------------
+ *  Calculate the lowest possible score (Center Only).
+ *  
+ *  Can the nominated bone be played in the Center position?  If so, could it 
+ *  block the other player or drive the pip count down to a value that is lower 
+ *  than all previously calculated ones ??  Moves that block the other player 
+ *  are preferred to non-blocking moves.
+ *    
+ */
+void lowestPossibleScore_CenterOnly(byte boneIdx, byte leftPips, byte rightPips, byte *retValue, byte *retIndex, byte *retDirection) {
+
+  if (leftPips + rightPips < *retValue) { 
+    *retValue = leftPips + rightPips;
+    *retDirection = CENTER;
+    *retIndex = boneIdx;
+  }
+  
+}
 
 /* ----------------------------------------------------------------------------
  *  Calculate the lowest possible score (West).
@@ -542,14 +582,14 @@ void lowestPossibleScore_Center(byte boneIdx, byte player, byte pips, byte *retV
  *  are preferred to non-blocking moves.
  *    
  */
-void lowestPossibleScore_West(boolean isDouble, byte boneIdx, byte player, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
+void lowestPossibleScore_West(boolean isDouble, byte boneIdx, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
 
   switch (boardMode) {
     
     case BOARD_MODE_TWO_BONES_PLAYED:
 
-      if (canBlock(player, pips) || bone_c_pips_outer + pips < *retValue) { 
-        *retValue = (canBlock(player, pips) ? 0 : bone_c_pips_outer + pips);
+      if (canBlock(pips) || bone_c_pips_outer + pips < *retValue) { 
+        *retValue = (canBlock(pips) ? 0 : bone_c_pips_outer + pips);
         *retDirection = WEST;
         *retIndex = boneIdx;
       } 
@@ -558,8 +598,8 @@ void lowestPossibleScore_West(boolean isDouble, byte boneIdx, byte player, byte 
   
     case BOARD_MODE_ONE_BONE_PLAYED:
 
-      if (canBlock(player, pips) || bone_c_pips_outer + (pips * (isDouble ? 2 : 1)) < *retValue) { 
-        *retValue = (canBlock(player, pips) ? 0 : bone_c_pips_outer + (pips * (isDouble ? 2 : 1)));
+      if (canBlock( pips) || bone_c_pips_outer + (pips * (isDouble ? 2 : 1)) < *retValue) { 
+        *retValue = (canBlock(pips) ? 0 : bone_c_pips_outer + (pips * (isDouble ? 2 : 1)));
         *retDirection = WEST;
         *retIndex = boneIdx;
       }
@@ -568,8 +608,8 @@ void lowestPossibleScore_West(boolean isDouble, byte boneIdx, byte player, byte 
      
     case BOARD_MODE_DOUBLE_BONE_PLAYED:
 
-      if (canBlock(player, pips) || (bone_e != NOTHING ? bone_e_pips_outer : bone_c_pips_outer + bone_c_pips_inner) + pips < *retValue) { 
-        *retValue = canBlock(player, pips) ? 0 : ((bone_e != NOTHING ? bone_e_pips_outer : bone_c_pips_outer + bone_c_pips_inner) + pips); 
+      if (canBlock(pips) || (bone_e != NOTHING ? bone_e_pips_outer : bone_c_pips_outer + bone_c_pips_inner) + pips < *retValue) { 
+        *retValue = canBlock(pips) ? 0 : ((bone_e != NOTHING ? bone_e_pips_outer : bone_c_pips_outer + bone_c_pips_inner) + pips); 
         *retDirection = WEST;
         *retIndex = boneIdx;
       }
@@ -578,8 +618,8 @@ void lowestPossibleScore_West(boolean isDouble, byte boneIdx, byte player, byte 
 
     case BOARD_MODE_X_AXIS_PLAYED:
 
-      if (canBlock(player, pips) || (bone_n != NOTHING ? bone_n_pips_outer : 0) + (bone_s != NOTHING ? bone_s_pips_outer : 0) + bone_e_pips_outer + pips < *retValue) { 
-        *retValue = canBlock(player, pips) ? 0 : ((bone_n != NOTHING ? bone_n_pips_outer : 0) + (bone_s != NOTHING ? bone_s_pips_outer : 0) + bone_e_pips_outer + pips); 
+      if (canBlock(pips) || (bone_n != NOTHING ? bone_n_pips_outer : 0) + (bone_s != NOTHING ? bone_s_pips_outer : 0) + bone_e_pips_outer + pips < *retValue) { 
+        *retValue = canBlock(pips) ? 0 : ((bone_n != NOTHING ? bone_n_pips_outer : 0) + (bone_s != NOTHING ? bone_s_pips_outer : 0) + bone_e_pips_outer + pips); 
         *retDirection = WEST;
         *retIndex = boneIdx;
       }
@@ -600,10 +640,10 @@ void lowestPossibleScore_West(boolean isDouble, byte boneIdx, byte player, byte 
  *  are preferred to non-blocking moves.
  *    
  */
-void lowestPossibleScore_West_CenterOnly(byte boneIdx, byte player, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
+void lowestPossibleScore_West_CenterOnly(byte boneIdx, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
 
-  if (canBlock(player, pips) || bone_c_pips_inner + bone_c_pips_outer + pips < *retValue) { 
-    *retValue = canBlock(player, pips) ? 0 : (bone_c_pips_inner + bone_c_pips_outer + pips); 
+  if (canBlock(pips) || bone_c_pips_inner + bone_c_pips_outer + pips < *retValue) { 
+    *retValue = canBlock(pips) ? 0 : (bone_c_pips_inner + bone_c_pips_outer + pips); 
     *retDirection = WEST;
     *retIndex = boneIdx;
   }
@@ -620,14 +660,14 @@ void lowestPossibleScore_West_CenterOnly(byte boneIdx, byte player, byte pips, b
  *  are preferred to non-blocking moves.
  *    
  */
-void lowestPossibleScore_East(boolean isDouble, byte boneIdx, byte player, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
+void lowestPossibleScore_East(boolean isDouble, byte boneIdx, byte pips, byte *retValue, byte *retIndex, byte *retDirection) {
 
   switch (boardMode) {
     
     case BOARD_MODE_ONE_BONE_PLAYED:
       
-      if (canBlock(player, pips) || bone_c_pips_inner + (pips * (isDouble ? 2 : 1)) < *retValue) {
-        *retValue = (canBlock(player, pips) ? 0 : bone_c_pips_inner + (pips * (isDouble ? 2 : 1)));
+      if (canBlock(pips) || bone_c_pips_inner + (pips * (isDouble ? 2 : 1)) < *retValue) {
+        *retValue = (canBlock(pips) ? 0 : bone_c_pips_inner + (pips * (isDouble ? 2 : 1)));
         *retDirection = EAST;
         *retIndex = boneIdx;
       }
@@ -636,8 +676,8 @@ void lowestPossibleScore_East(boolean isDouble, byte boneIdx, byte player, byte 
       
     case BOARD_MODE_DOUBLE_BONE_PLAYED:
 
-      if (canBlock(player, pips) || (bone_w != NOTHING ? bone_w_pips_outer : bone_c_pips_outer + bone_c_pips_inner) + pips < *retValue) { 
-        *retValue = canBlock(player, pips) ? 0 :((bone_w != NOTHING ? bone_w_pips_outer : bone_c_pips_outer + bone_c_pips_inner) + pips); 
+      if (canBlock(pips) || (bone_w != NOTHING ? bone_w_pips_outer : bone_c_pips_outer + bone_c_pips_inner) + pips < *retValue) { 
+        *retValue = canBlock(pips) ? 0 :((bone_w != NOTHING ? bone_w_pips_outer : bone_c_pips_outer + bone_c_pips_inner) + pips); 
         *retDirection = EAST;
         *retIndex = boneIdx;
       }
@@ -646,8 +686,8 @@ void lowestPossibleScore_East(boolean isDouble, byte boneIdx, byte player, byte 
 
     case BOARD_MODE_X_AXIS_PLAYED:
 
-      if (canBlock(player, pips) || (bone_n != NOTHING ? bone_n_pips_outer : 0) + (bone_s != NOTHING ? bone_s_pips_outer : 0) + bone_w_pips_outer + pips < *retValue) { 
-        *retValue = canBlock(player, pips) ? 0 : ((bone_n != NOTHING ? bone_n_pips_outer : 0) + (bone_s != NOTHING ? bone_s_pips_outer : 0) + bone_w_pips_outer + pips); 
+      if (canBlock(pips) || (bone_n != NOTHING ? bone_n_pips_outer : 0) + (bone_s != NOTHING ? bone_s_pips_outer : 0) + bone_w_pips_outer + pips < *retValue) { 
+        *retValue = canBlock(pips) ? 0 : ((bone_n != NOTHING ? bone_n_pips_outer : 0) + (bone_s != NOTHING ? bone_s_pips_outer : 0) + bone_w_pips_outer + pips); 
         *retDirection = EAST;
         *retIndex = boneIdx;
       }
@@ -667,7 +707,7 @@ void lowestPossibleScore_East(boolean isDouble, byte boneIdx, byte player, byte 
 void playBone(byte player, byte index, byte position) {
 
 
-  // Update the board's end tiles ..
+  // Update the board's end bones ..
   
   switch (position) {
       

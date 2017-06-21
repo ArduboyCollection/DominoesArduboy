@@ -65,13 +65,16 @@ const byte PROGMEM hourglass[] = {
 };
 
 
-#define MESSAGE_BOX_DELAY		      20
-#define MESSAGE_BOX_X     		    BONES_GRAVEYARD_X
-#define MESSAGE_BOX_X_MAX  		    BONES_GRAVEYARD_X_MAX
-#define MESSAGE_BOX_Y             BONES_GRAVEYARD_Y
-#define MESSAGE_BOX_Y_MAX         BONES_GRAVEYARD_Y_MAX - 4
-#define MESSAGE_BOX_Y_2_LINE      MESSAGE_BOX_Y + 11
-#define MESSAGE_BOX_Y_3_LINE      MESSAGE_BOX_Y + 7
+#define MESSAGE_BOX_DELAY_INIT      500
+#define MESSAGE_BOX_DELAY           20
+#define MESSAGE_BOX_DELAY_SHORT     5
+
+#define MESSAGE_BOX_X     		      BONES_GRAVEYARD_X
+#define MESSAGE_BOX_X_MAX  		      BONES_GRAVEYARD_X_MAX
+#define MESSAGE_BOX_Y               BONES_GRAVEYARD_Y
+#define MESSAGE_BOX_Y_MAX           BONES_GRAVEYARD_Y_MAX - 4
+#define MESSAGE_BOX_Y_2_LINE        MESSAGE_BOX_Y + 11
+#define MESSAGE_BOX_Y_3_LINE        MESSAGE_BOX_Y + 7
 
 
 /* ----------------------------------------------------------------------------
@@ -81,7 +84,7 @@ const byte PROGMEM hourglass[] = {
  *  to play a bone.  The animation can get quite annoying - especially when
  *  debugging so it can conditionally be suppressed using the definition
  *  SKIP_ANIMATIONS.  The user can skip the animation by pressing the A or B
- *  button. Once the animation is complete, a confirmation of the tile being  
+ *  button. Once the animation is complete, a confirmation of the bone being  
  *  played is shown.
  *  
  */
@@ -127,10 +130,10 @@ void drawMessageBox_WithHourglass(byte boneIdx) {
   frame = 0;
   
   arduboy.fillRect(MESSAGE_BOX_X, MESSAGE_BOX_Y + 1, MESSAGE_BOX_X_MAX, MESSAGE_BOX_Y_MAX - 2, BLACK); 
-  arduboy.setCursor(MESSAGE_BOX_X, MESSAGE_BOX_Y_2_LINE);
-  arduboy.print("I will play\nthe    bone");
-  arduboy.drawPixel(124, 31, WHITE);
-  drawBone_Rotated(bones_ref[boneIdx], MESSAGE_BOX_X + 21, 24, false);
+  arduboy.setCursor(MESSAGE_BOX_X + 2, MESSAGE_BOX_Y_2_LINE);
+  arduboy.print("I will playthe    bone");
+  arduboy.drawPixel(126, 29, WHITE);
+  drawBone_Rotated(bones_ref[boneIdx], MESSAGE_BOX_X + 23, 22, false);
   
   arduboy.display();
   DelayOrButtonPress(MESSAGE_BOX_DELAY);
@@ -142,16 +145,44 @@ void drawMessageBox_WithHourglass(byte boneIdx) {
  *  Render a simple message. 
  *  
  */
-void drawMessageBox(String message, byte lines) {
+void drawMessageBox(String message, byte lines, bool waitForButtonPress) {
 
+  drawMessageBox(message, lines, waitForButtonPress, NOTHING);
+  
+}
+
+void drawMessageBox(String message, byte lines, bool waitForButtonPress, byte renderScore) {
+
+  delay(MESSAGE_BOX_DELAY_INIT);
+  
   arduboy.fillRect(BONES_GRAVEYARD_X, BONES_GRAVEYARD_Y, BONES_GRAVEYARD_X_MAX, BONES_GRAVEYARD_Y_MAX, BLACK); 
   drawHorizontalDottedLine(MESSAGE_BOX_X, MESSAGE_BOX_X_MAX, MESSAGE_BOX_Y);
   drawHorizontalDottedLine(MESSAGE_BOX_X, MESSAGE_BOX_X_MAX, MESSAGE_BOX_Y_MAX);
-  arduboy.setCursor(MESSAGE_BOX_X, (lines == 2 ? MESSAGE_BOX_Y_2_LINE : MESSAGE_BOX_Y_3_LINE));
+  arduboy.setCursor(MESSAGE_BOX_X + 2, (lines == 2 ? MESSAGE_BOX_Y_2_LINE : MESSAGE_BOX_Y_3_LINE));
   arduboy.print(message);
   
   arduboy.display();
-  DelayOrButtonPress(MESSAGE_BOX_DELAY);
+
+
+  // Should a players score be updated?
+  
+  if (renderScore != NOTHING) {
+    renderPlayersScore(renderScore, NOTHING);
+  }
+
+
+  // Should the message box be dismissed after a delay or wait until a button is pressed?
+  
+  if (waitForButtonPress) {
+    
+    WaitForButtonPress();
+    
+  }
+  else {
+  
+    DelayOrButtonPress((renderScore == NOTHING ? MESSAGE_BOX_DELAY : MESSAGE_BOX_DELAY_SHORT));
+    
+  }
 
 }
 

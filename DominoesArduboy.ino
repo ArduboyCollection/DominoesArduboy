@@ -1,5 +1,5 @@
 #include "Arduboy\Arduboy2.h"
-
+ 
 Arduboy2 arduboy;  
 Sprites sprites;
 
@@ -15,23 +15,8 @@ Sprites sprites;
 #define SCORE_PLAYER_WIDTH                    SCORE_COMPUTER_WIDTH
 #define SCORE_PLAYER_HEIGHT                   SCORE_COMPUTER_HEIGHT
 
-#define STATE_GAME_INTRO                      0
-#define STATE_GAME_PLAY_GAME                  1
-#define STATE_GAME_PLAY_HUMAN                 2
-#define STATE_GAME_PLAY_HUMAN_HAND_SEL        3
-#define STATE_GAME_PLAY_HUMAN_GRAVE_SEL       4
-#define STATE_GAME_PLAY_HUMAN_BOARD_SEL       5
-
-#define WHITE                                 1
-#define BLACK                                 0
-
-#define TABLE_COLOUR                          GREYB
-#define TABLE_COLOUR_DARK                     GREYA
-#define TABLE_COLOUR_OUTLINE                  GREY9
-
-#define BONES_MAX_PIPS                        6      
 #define BONES_COUNT                           28
-#define BONES_INITIAL_COUNT                   7
+#define BONES_INITIAL_COUNT                   2
 
 #define PLAYER_COMPUTER                       0
 #define PLAYER_HUMAN                          1
@@ -39,16 +24,6 @@ Sprites sprites;
 #define BONES_SMALL_X_SPACING_PORTRAIT        10
 #define BONES_SMALL_Y_SPACING_PORTRAIT        18
 #define BONES_SMALL_X_SPACING_LANDSCAPE       BONES_SMALL_Y_SPACING_PORTRAIT
-#define BONES_SMALL_Y_SPACING_LANDSCAPE       BONES_SMALL_X_SPACING_PORTRAIT
-#define BONES_SMALL_X_SPACING_HALF            5 
-#define BONES_SMALL_Y_SPACING_HALF            9
-#define BONES_SMALL_HEIGHT_PORTRAIT           17
-#define BONES_SMALL_WIDTH_PORTRAIT            9
-#define BONES_SMALL_HEIGHT_LANDSCAPE          BONES_SMALL_WIDTH_PORTRAIT
-#define BONES_SMALL_WIDTH_LANDSCAPE           BONES_SMALL_HEIGHT_PORTRAIT
-
-#define BONE_POS_X                            1
-#define BONE_POS_Y                            23
 
 #define BONE_C_POS_X_NO_BONES_PLAYED          19
 #define BONE_C_POS_Y_NO_BONES_PLAYED          23
@@ -97,7 +72,7 @@ Sprites sprites;
 #define PLAYER_BOTTOM_HAND_X                  10
 #define PLAYER_BOTTOM_HAND_Y                  55
 #define PLAYER_HAND_MAX_VISIBLE               6
-#define GAME_FIRST_TO_REACH_SCORE             100
+#define GAME_FIRST_TO_REACH_SCORE             30
 
 #define PLAYER_BOTTOM_VISIBLE                 PLAYER_HAND_MAX_VISIBLE
 #define PLAYER_BOTTOM_LEFT_ARROW_X            0
@@ -106,8 +81,8 @@ Sprites sprites;
 #define PLAYER_BOTTOM_LEFT_ARROW_HEIGHT       9
 #define PLAYER_BOTTOM_RIGHT_ARROW_X           122
 #define PLAYER_BOTTOM_RIGHT_ARROW_Y           PLAYER_BOTTOM_LEFT_ARROW_Y
-#define PLAYER_BOTTOM_RIGHT_ARROW_WIDTH       5
-#define PLAYER_BOTTOM_RIGHT_ARROW_HEIGHT      9
+#define PLAYER_BOTTOM_RIGHT_ARROW_WIDTH       PLAYER_BOTTOM_LEFT_ARROW_WIDTH
+#define PLAYER_BOTTOM_RIGHT_ARROW_HEIGHT      PLAYER_BOTTOM_LEFT_ARROW_HEIGHT
 
 #define CENTER                                0
 #define NORTH                                 1
@@ -126,8 +101,8 @@ Sprites sprites;
 #define MAX_Y_LANDSCAPE                       64
 
                                                     // The 'bones_ref' array contains an element for each bone in a standard
-                                                    // 28 bone.  Arrays that represent players hands, bones available or bones
-                                                    // played all contain indexes that point to this array.
+                                                    // 28 bone set.  Arrays that represent players hands, bones available or 
+                                                    // bones played all contain indexes that point to this array.
 
                             //    0     1     2     3     4     5     6
 byte bones_ref[BONES_COUNT] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 
@@ -163,14 +138,14 @@ byte players_score[2] = {0};				                // Players score.
 
                                                     // When making a move, the player must select a bone from their hand
                                                     // followed by a position on the board.  Alternatively, they can select
-                                                    // a tile from the graveyard to add to their hand (although in reality
-                                                    // they will always  get the next tile from the 'bones_available' array.
+                                                    // a bone from the graveyard to add to their hand (although in reality
+                                                    // they will always get the next bone from the 'bones_available' array.
 
 byte players_hand_visible_idx = 0;			            // Only six player's bones are visible at one time and the player can
                                                     // scroll through these.  The 'players_hand_visible_idx' defines which
                                                     // should be displayed in the left most position on the display.
 byte players_hand_highlight_idx = 0;      	        // Used to store the currently selected bone.
-byte graveyard_highlight_idx = NOTHING;             // Used to store the currently selected graveyard tile.
+byte graveyard_highlight_idx = NOTHING;             // Used to store the currently selected graveyard bone.
 byte board_highlighted_idx = NOTHING;               // Used to store the currently seelcted board location.  
 
 byte boneCounts_Overall[7] = {0};         	        // Used to count how many of each bone is visible on the board.
@@ -196,10 +171,10 @@ byte bone_c_pips_outer = NOTHING;
 byte boardMode = BOARD_MODE_NO_BONES_PLAYED;        // Stores the current mode of the board which is used to determine what
                                                     // board positions should be rendered and selectable when playing a bone.
                                                     // For example, when the boardMode is equal to 'NO_BONES_PLAYED' only the
-                                                    // center tile of the board is rendered and selectable.
+                                                    // center bone of the board is rendered and selectable.
 
-byte gameState = STATE_GAME_INTRO;				
 byte frame = 0;
+byte playersTurn = PLAYER_HUMAN;                    // Used to retain the players turn at the end of each round.
 
 
 /* ----------------------------------------------------------------------------
@@ -209,8 +184,8 @@ void setup() {
 
   arduboy.boot();
   arduboy.setFrameRate(30);
-  arduboy.setTextWrap(true, BONES_GRAVEYARD_X);
-  arduboy.setTextVertSpacing(7);
+  arduboy.setTextWrap(true, BONES_GRAVEYARD_X + 2, MAX_X_LANDSCAPE);
+  arduboy.setTextVertSpacing(12);
 
 }
 
@@ -220,6 +195,16 @@ void setup() {
  *  game play.  These correspond to the STATE_GAME_ .. constants however the 
  *  playersHand_Loop handles all of the the STATE_GAME_PLAY_HUMAN variants.
  */
+
+#define STATE_GAME_INTRO                      0
+#define STATE_GAME_PLAY_GAME                  1
+#define STATE_GAME_PLAY_COMPUTER              2
+#define STATE_GAME_PLAY_HUMAN_HAND_SEL        3
+#define STATE_GAME_PLAY_HUMAN_GRAVE_SEL       4
+#define STATE_GAME_PLAY_HUMAN_BOARD_SEL       5
+
+byte gameState = STATE_GAME_INTRO;        
+ 
 typedef void (*FunctionPointer) ();
 
 const FunctionPointer PROGMEM gameLoop[] = {
@@ -300,7 +285,7 @@ void playGame_Loop() {
     
     arduboy.clear();
     renderGraveyard(NOTHING, players_hand_highlight_idx);
-    gameState = STATE_GAME_PLAY_HUMAN_HAND_SEL;
+    gameState = (playersTurn == PLAYER_COMPUTER ? STATE_GAME_PLAY_COMPUTER : STATE_GAME_PLAY_HUMAN_HAND_SEL);
     renderBoard(NOTHING);
 
   }

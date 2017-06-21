@@ -162,52 +162,6 @@ void renderPlayerScore(byte player, bool highlight) {
 
 
 /* ----------------------------------------------------------------------------
- *  Render a left scroll arrow.
- *
- *  Render a left scroll arrow at the nominated position. Render an outline 
- *  only if the control is disabled or a solid arrow in black if enabled.  
- *  
- */
-void renderLeftScroll(int x, int y, bool highlighted) {
-
-  if (highlighted) {
-
-    sprites.drawOverwrite(x, y, leftArrow_Highlight, frame);
-
-  }
-  else {
-
-    sprites.drawOverwrite(x, y, leftArrow_Lowlight, frame);
-    
-  }
-  
-}
-
-
-/* ----------------------------------------------------------------------------
- *  Render a right scroll arrow.
- *
- *  Render a right scroll arrow at the nominated position. Render an outline 
- *  only if the control is disabled or a solid arrow in black if enabled.  
- *  
- */
- void renderRightScroll(int x, int y, bool highlighted) {
-
-  if (highlighted) {
-
-    sprites.drawOverwrite(x, y, rightArrow_Highlight, frame);
-    
-  }
-  else {
-
-    sprites.drawOverwrite(x, y, rightArrow_Lowlight, frame);
-    
-  }
-  
-}
-
-
-/* ----------------------------------------------------------------------------
  *  Render the player's hand.
  *  
  *  Only six bones can be rendered across the screen however the players hand
@@ -229,8 +183,8 @@ void renderPlayersHand(byte highlight) {
 
   }
 
-  renderLeftScroll(PLAYER_BOTTOM_LEFT_ARROW_X, PLAYER_BOTTOM_LEFT_ARROW_Y, (players_hand_visible_idx != 0));
-  renderRightScroll(PLAYER_BOTTOM_RIGHT_ARROW_X, PLAYER_BOTTOM_RIGHT_ARROW_Y, (players_hand_idx[1] - players_hand_visible_idx) > PLAYER_HAND_MAX_VISIBLE);
+  sprites.drawOverwrite(PLAYER_BOTTOM_LEFT_ARROW_X, PLAYER_BOTTOM_LEFT_ARROW_Y, (players_hand_visible_idx != 0 ? leftArrow_Highlight : leftArrow_Lowlight), frame);
+  sprites.drawOverwrite(PLAYER_BOTTOM_RIGHT_ARROW_X, PLAYER_BOTTOM_RIGHT_ARROW_Y, ((players_hand_idx[1] - players_hand_visible_idx) > PLAYER_HAND_MAX_VISIBLE ? rightArrow_Highlight : rightArrow_Lowlight), frame);
   arduboy.display();
 
 }

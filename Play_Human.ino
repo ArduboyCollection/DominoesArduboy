@@ -25,12 +25,12 @@ void playersHand_Loop() {
       if (gameState >= STATE_GAME_PLAY_HUMAN_HAND_SEL) {
 
         delay(1000);
-        drawMessageBox("You cannot play a bone. You must pass.", 3);
+        drawMessageBox("You cannot play a bone. You must pass.", 3, true);
 
       }
       else {
 
-        drawMessageBox("No one can play a bone. Its a stale-mate.", 3);
+        drawMessageBox("No one can play a bone. Its a stale-mate.", 3, true);
 
       }
       
@@ -251,7 +251,7 @@ void playersHand_Loop() {
               players_hand_highlight_idx = NOTHING;
               players_hand_visible_idx = 0;
               board_highlighted_idx = NOTHING;
-              gameState = STATE_GAME_PLAY_HUMAN;
+              gameState = STATE_GAME_PLAY_COMPUTER;
 
               renderPlayersHand(NOTHING);
 
@@ -276,16 +276,19 @@ void playersHand_Loop() {
 
     // Pass control to the computer if the game is still in play or finish the game ..
       
+    gameState = (isAnyoneOut() ? STATE_GAME_PLAY_GAME : gameState);
     gameState = (isTheGameOver() ? STATE_GAME_INTRO : gameState);
-    if (gameState != STATE_GAME_INTRO) {
-      gameState = (isAnyoneOut() ? STATE_GAME_PLAY_GAME : gameState);
-    }
-    if (gameState != STATE_GAME_PLAY_GAME) {
+    if (gameState >= STATE_GAME_PLAY_HUMAN_HAND_SEL) {
       gameState = (canEitherPlayerMove() ? gameState : STATE_GAME_PLAY_GAME);
     }
 
     delay(100);
   
   }
+
+
+  // The playersTurn variable is used to record whose turn it is between rounds ..
+  
+  playersTurn = PLAYER_COMPUTER;
 
 }

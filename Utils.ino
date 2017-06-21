@@ -115,7 +115,7 @@ byte getPipCount() {
 /* ----------------------------------------------------------------------------
  *  Get the left-hand pip count of the bone by value.
  *  
- *  Bone values are a literal representation of the tile represented as a two-digit
+ *  Bone values are a literal representation of the bone represented as a two-digit
  *  number such as 13 where the 1 is the right hand pip value and 3 is the left 
  *  hand pip value.
  *  
@@ -130,7 +130,7 @@ byte leftPips_ByBoneValue(byte boneValue) {
 /* ----------------------------------------------------------------------------
  *  Get the right-hand pip count of the bone by value.
  *  
- *  Bone values are a literal representation of the tile represented as a two-digit
+ *  Bone values are a literal representation of the bone represented as a two-digit
  *  number such as 13 where the 1 is the right hand pip value and 3 is the left 
  *  hand pip value.
  *  
@@ -191,7 +191,7 @@ byte playBone_NewPipValue(byte existingBonePips, byte newBoneId) {
 
 
 /* ----------------------------------------------------------------------------
- *  Have all 3 tiles on the X-axis of play been played?
+ *  Have all 3 bones on the X-axis of play been played?
  *  
  */
 boolean hasXAxisBeenPlayed() {
@@ -274,7 +274,7 @@ boolean hasADoubleBeenPlayed(byte currentMode) {
  *  Will the nominated bone block play?
  *  
  */
-boolean canBlock(byte player, byte pips) {
+boolean canBlock(byte pips) {
 
   return (boneCounts_Overall[pips] + boneCounts_Inhand[pips] == 7);
 
@@ -282,11 +282,11 @@ boolean canBlock(byte player, byte pips) {
 
 
 /* ----------------------------------------------------------------------------
- *  Populate tile counts.
+ *  Populate bone counts.
  *  
  *  When determining whether a bone could block play, a count of each pip value
  *  (from one to six) that is visible is determined by inspecting the players 
- *  hand and the played bones.   The tile counts per pip are recorded into two
+ *  hand and the played bones.   The bone counts per pip are recorded into two
  *  arrays, boneCounts_Overall and boneCounts_Inhand.
  *  
  */
@@ -299,7 +299,7 @@ void populateBoneCounts(byte player) {
   memset(boneCounts_Inhand, 0, sizeof(boneCounts_Inhand));
 
 
-  // Populate tile count from players hand ..
+  // Populate bone count from players hand ..
 
   for (byte x = 0; x < players_hand_idx[player]; x++) {
     
@@ -312,7 +312,7 @@ void populateBoneCounts(byte player) {
   }
 
 
-  // Populate visible tiles in grave yard ..
+  // Populate visible bones in grave yard ..
 
   for (byte x = 0; x < bones_played_idx; x++) {
     
@@ -325,7 +325,7 @@ void populateBoneCounts(byte player) {
   }
 
 
-  // Populate visible tiles on board ..
+  // Populate visible bones on board ..
   
   if (bone_c != NOTHING) {
     boneCounts_Overall[bone_c_pips_inner]++;
@@ -444,7 +444,7 @@ boolean canPlayBone(byte boneId) {
 
 
 /* ----------------------------------------------------------------------------
- *  Can either player make a move or draw a tile?
+ *  Can either player make a move or draw a bone?
  *  
  */
 boolean canEitherPlayerMove() {
@@ -459,15 +459,14 @@ boolean canEitherPlayerMove() {
 
     if (hand0 == hand1) {
       
-      drawMessageBox("No one can\nplay a bone.", 2);
+      drawMessageBox("No one can\nplay a bone.", 2, true);
       return false;
     }
 
     if (hand0 > hand1) {
       
       players_score[PLAYER_HUMAN] = hand0 - hand1;
-      drawMessageBox("No one can\nplay a bone.", 2);
-      renderPlayersScore(PLAYER_HUMAN, NOTHING);   
+      drawMessageBox("No one can\nplay a bone.", 2, true, PLAYER_HUMAN);
       return false;         
 
     }
@@ -475,8 +474,7 @@ boolean canEitherPlayerMove() {
     if (hand0 < hand1) {
       
       players_score[PLAYER_COMPUTER] = hand1 - hand0;
-      drawMessageBox("No one can\nplay a bone.", 2);
-      renderPlayersScore(PLAYER_COMPUTER, NOTHING);   
+      drawMessageBox("No one can\nplay a bone.", 2, true, PLAYER_COMPUTER);
       return false;         
 
     }
@@ -531,6 +529,22 @@ void DelayOrButtonPress(byte delayVal) {
 
 }
 
+
+
+/* ----------------------------------------------------------------------------
+ *  Wait for a button press. 
+ *  
+ */
+void WaitForButtonPress() {
+  
+  while (true) {
+    if (arduboy.pressed(A_BUTTON) || arduboy.pressed(B_BUTTON)) { break; }
+    delay(100);
+  }
+
+}
+
+
 /* ----------------------------------------------------------------------------
  *  Draw a horizontal dotted line. 
  *  
@@ -554,14 +568,14 @@ boolean isTheGameOver() {
 
   if (players_score[PLAYER_COMPUTER] > GAME_FIRST_TO_REACH_SCORE || players_score[PLAYER_HUMAN] > GAME_FIRST_TO_REACH_SCORE) {
 
-    if (players_score[PLAYER_COMPUTER] > 10) {
+    if (players_score[PLAYER_COMPUTER] > GAME_FIRST_TO_REACH_SCORE) {
       
-      drawMessageBox("\n  I won !", 3);
+      drawMessageBox("\n  I won !", 3, true);
 
     }
     else {
       
-      drawMessageBox("\n You won !", 3);
+      drawMessageBox("\n You won !", 3, true);
 
     }
 
@@ -599,8 +613,7 @@ boolean isAnyoneOut() {
         renderPlayersHand(players_hand_highlight_idx);
 
         players_score[PLAYER_COMPUTER] = players_score[PLAYER_COMPUTER] + handValue(1);
-        drawMessageBox("I have play\ned all my\nbones.", 3);
-        renderPlayersScore(PLAYER_COMPUTER, NOTHING);
+        drawMessageBox("I have played all my  bones.", 3, true, PLAYER_COMPUTER);
         gameState = STATE_GAME_PLAY_GAME;
         return true;
 
@@ -611,8 +624,7 @@ boolean isAnyoneOut() {
         renderPlayersHand(players_hand_highlight_idx);
 
         players_score[PLAYER_HUMAN] = players_score[PLAYER_HUMAN] + handValue(PLAYER_COMPUTER);
-        drawMessageBox("You have pl\nayed all of\nyour bones.", 3);
-        renderPlayersScore(PLAYER_HUMAN, NOTHING);
+        drawMessageBox("You have played all ofyour bones.", 3, true, PLAYER_HUMAN);
         gameState = STATE_GAME_PLAY_GAME;
         return true;
 

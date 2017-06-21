@@ -1367,9 +1367,9 @@ class Arduboy2 : public Print, public Arduboy2Base
    */
   void setTextWrap(bool w);
   
-  void setTextWrap(bool w, int16_t x);    // SJH
-  void setTextWrapXPos(int16_t x);  	  // SJH
-  void setTextVertSpacing(int16_t y); 	  // SJH
+  void setTextWrap(bool w, int16_t l, int16_t r);    	// SJH
+  void setTextWrapPositions(int16_t l, int16_t r);    	// SJH
+  void setTextVertSpacing(int16_t y); 	  				// SJH
   
   /** \brief
    * Clear the display buffer and set the text cursor to location 0, 0
@@ -1377,7 +1377,8 @@ class Arduboy2 : public Print, public Arduboy2Base
   void clear();
 
  protected:
-  int16_t cursor_x_wrap;		// SJH
+  int16_t cursor_wrap_leftPos;		// SJH
+  int16_t cursor_wrap_rightPos;		// SJH
   int16_t cursor_x;
   int16_t cursor_y;
   int16_t vert_spacing;			// SJH
