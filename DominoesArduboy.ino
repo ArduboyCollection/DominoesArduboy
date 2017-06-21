@@ -3,6 +3,7 @@
 Arduboy2 arduboy;  
 Sprites sprites;
 
+#define DEBUG
 #define NO_SKIP_ANIMATIONS
 
 #define SCORE_COMPUTER_LEFT                   0
@@ -237,8 +238,6 @@ void playGame_Loop() {
 
   while (gameState == STATE_GAME_PLAY_GAME) {
 
-    int seed = analogRead(3);
-
     
     // Clear and reset the players hands, the available bones and the board ..
     
@@ -275,8 +274,13 @@ void playGame_Loop() {
            
 
     // Shuffle and deal the bones ..
-    
-    randomSeed(seed);
+
+#ifdef DEBUG  
+    randomSeed(3);          // Seed with a constant to enable debugging with a repeatable bone set. 
+#else
+    initRandomSeed();
+#endif
+
     shuffleBones();
     dealBones();
   
