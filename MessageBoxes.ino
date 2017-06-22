@@ -117,9 +117,6 @@ void drawMessageBox_WithHourglass(byte boneIdx) {
 
       }
 
-#ifdef SCREENSHOTS
-  //screenShot();
-#endif
       arduboy.display();
 
     }
@@ -139,10 +136,6 @@ void drawMessageBox_WithHourglass(byte boneIdx) {
   arduboy.print("I will playthe    bone");
   arduboy.drawPixel(126, 29, WHITE);
   drawBone_Rotated(bones_ref[boneIdx], MESSAGE_BOX_X + 23, 22, false);
-
-#ifdef SCREENSHOTS
-  screenShot();
-#endif
 
   arduboy.display();
   DelayOrButtonPress(MESSAGE_BOX_DELAY);

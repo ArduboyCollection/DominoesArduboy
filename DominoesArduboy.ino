@@ -1,7 +1,7 @@
 #define DEBUG
 #define NO_SOUNDS
 #define ANIMATIONS
-#define SCREENSHOTS
+#define NO_SCREENSHOTS
 
 #include "Arduboy\Arduboy2.h"
 #ifdef SOUNDS
