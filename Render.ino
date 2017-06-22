@@ -245,7 +245,7 @@ void renderGraveyard(byte highlight, byte playersHandHighlight) {
     
     // Do not render a fourth row as there is not enough real-estate ..
     
-    if (rows >= BONES_GRAVEYARD_BONES_ROWS) { break; }
+    if (rows > BONES_GRAVEYARD_BONES_ROWS) { break; }
     
   }
 

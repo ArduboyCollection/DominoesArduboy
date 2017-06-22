@@ -1,4 +1,4 @@
-#define DEBUG
+#define NO_DEBUG
 #define NO_SOUNDS
 #define ANIMATIONS
 #define NO_SCREENSHOTS
@@ -75,7 +75,7 @@
 #define PLAYER_BOTTOM_HAND_X                  10
 #define PLAYER_BOTTOM_HAND_Y                  55
 #define PLAYER_HAND_MAX_VISIBLE               6
-#define GAME_FIRST_TO_REACH_SCORE             30
+#define GAME_FIRST_TO_REACH_SCORE             100
 
 #define PLAYER_BOTTOM_VISIBLE                 PLAYER_HAND_MAX_VISIBLE
 #define PLAYER_BOTTOM_LEFT_ARROW_X            0
@@ -289,7 +289,7 @@ void playGame_Loop() {
 #ifdef DEBUG  
     randomSeed(3);          // Seed with a constant to enable debugging with a repeatable bone set. 
 #else
-    initRandomSeed();
+    arduboy.initRandomSeed();
 #endif
 
     shuffleBones();
