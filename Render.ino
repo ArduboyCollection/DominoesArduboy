@@ -90,7 +90,7 @@ void renderPlayersScore(byte player, byte boneIdx) {
   for (byte y = 0; y < 6; y++) {
 
     renderPlayerScore(player, (y % 2 == 0));
-    delay(250);
+    arduboy.delayShort(250);
 
   }
 
@@ -156,6 +156,9 @@ void renderPlayerScore(byte player, bool highlight) {
     
   }
 
+#ifdef SCREENSHOTS
+  //screenShot();
+#endif
   arduboy.display();
 
 }
@@ -185,6 +188,11 @@ void renderPlayersHand(byte highlight) {
 
   sprites.drawOverwrite(PLAYER_BOTTOM_LEFT_ARROW_X, PLAYER_BOTTOM_LEFT_ARROW_Y, (players_hand_visible_idx != 0 ? leftArrow_Highlight : leftArrow_Lowlight), frame);
   sprites.drawOverwrite(PLAYER_BOTTOM_RIGHT_ARROW_X, PLAYER_BOTTOM_RIGHT_ARROW_Y, ((players_hand_idx[1] - players_hand_visible_idx) > PLAYER_HAND_MAX_VISIBLE ? rightArrow_Highlight : rightArrow_Lowlight), frame);
+
+#ifdef SCREENSHOTS
+  //screenShot();
+#endif
+
   arduboy.display();
 
 }
@@ -250,6 +258,11 @@ void renderGraveyard(byte highlight, byte playersHandHighlight) {
   }
 
   renderPlayersHand(playersHandHighlight);
+
+#ifdef SCREENSHOTS
+//  screenShot();
+#endif
+  
   arduboy.display();    
   
 }
@@ -315,6 +328,10 @@ void renderBoard(byte highlight) {
   }
 
   renderPlayersHand(players_hand_highlight_idx);
+
+#ifdef SCREENSHOTS
+  //screenShot();
+#endif  
   arduboy.display();
   
 }

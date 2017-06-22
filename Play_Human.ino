@@ -24,7 +24,7 @@ void playersHand_Loop() {
 
       if (gameState >= STATE_GAME_PLAY_HUMAN_HAND_SEL) {
 
-        delay(1000);
+        arduboy.delayShort(1000);
         drawMessageBox("You cannot play a bone. You must pass.", 3, true);
 
       }
@@ -282,7 +282,7 @@ void playersHand_Loop() {
       gameState = (canEitherPlayerMove() ? gameState : STATE_GAME_PLAY_GAME);
     }
 
-    delay(100);
+    arduboy.delayShort(100);
   
   }
 

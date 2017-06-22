@@ -50,9 +50,8 @@ void drawSplash_Loop() {
 
   int delayVal = 0;
 
-
+  
   // Reset the scores ..
-
   memset(players_score, 0, (sizeof(players_score) / sizeof(players_score[0])));
 
 
@@ -68,6 +67,15 @@ void drawSplash_Loop() {
   arduboy.setCursor(SPLASH_HEADLINE_X, SPLASH_HEADLINE_Y);
   arduboy.print("Dominoes");
   arduboy.display();
+
+#ifdef SOUNDS
+
+  // Play welcome tune ..
+  
+  tunes.tone(1047,300);
+  tunes.tone(1047,300);
+  tunes.tone(1047,300);
+#endif
 
   DelayOrButtonPress(SPLASH_DELAY_BEFORE_PROMPT);
 
@@ -92,7 +100,12 @@ void drawSplash_Loop() {
   
   while (true) {
     if (arduboy.pressed(A_BUTTON)) { break; }
-    delay(100);
+    arduboy.delayShort(100);
+
+#ifdef SCREENSHOTS
+  //screenShot();
+#endif
+
   }
 
   gameState = STATE_GAME_PLAY_GAME;

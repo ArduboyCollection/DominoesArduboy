@@ -64,7 +64,7 @@ void dealBones() {
  *  
  */
 byte getPipCount() {
-
+/*
   if (bone_c != NOTHING && bone_n == NOTHING && bone_s == NOTHING && bone_e == NOTHING && bone_w == NOTHING) {
       
     return bone_c_pips_inner + bone_c_pips_outer;
@@ -108,6 +108,29 @@ byte getPipCount() {
   }
 
   return NOTHING;
+ */
+  if (bone_c == NOTHING && bone_n == NOTHING && bone_s == NOTHING && bone_e == NOTHING && bone_w == NOTHING) {
+      
+    return NOTHING;
+            
+  }
+
+  if (bone_c != NOTHING && bone_n == NOTHING && bone_s == NOTHING && bone_e == NOTHING && bone_w == NOTHING) {
+      
+    return bone_c_pips_inner + bone_c_pips_outer;
+            
+  }
+
+  if (bone_e != NOTHING && bone_w != NOTHING) {
+    
+    return bone_w_pips_outer + bone_e_pips_outer + (bone_n != NOTHING ? bone_n_pips_outer : 0) + (bone_s != NOTHING ? bone_s_pips_outer : 0);
+          
+  }
+  else {
+   
+    return (bone_c_pips_inner == bone_c_pips_outer ? bone_c_pips_inner + bone_c_pips_outer : bone_c_pips_outer) + (bone_w != NOTHING ? bone_w_pips_outer : 0) + (bone_e != NOTHING ? bone_e_pips_outer : 0);
+          
+  }
   
 }
 
@@ -539,7 +562,7 @@ void WaitForButtonPress() {
   
   while (true) {
     if (arduboy.pressed(A_BUTTON) || arduboy.pressed(B_BUTTON)) { break; }
-    delay(100);
+    arduboy.delayShort(100);
   }
 
 }
@@ -636,3 +659,10 @@ boolean isAnyoneOut() {
 
   return false;
 }
+
+#ifdef SCREENSHOTS
+void screenShot() {
+  Serial.write(arduboy.getBuffer(), 128 * 64 / 8);
+  delay(1000);
+}
+#endif

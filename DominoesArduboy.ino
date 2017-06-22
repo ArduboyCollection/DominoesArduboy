@@ -1,10 +1,12 @@
-#include "Arduboy\Arduboy2.h"
- 
-Arduboy2 arduboy;  
-Sprites sprites;
-
 #define DEBUG
-#define NO_SKIP_ANIMATIONS
+#define NO_SOUNDS
+#define ANIMATIONS
+#define SCREENSHOTS
+
+#include "Arduboy\Arduboy2.h"
+#ifdef SOUNDS
+#include <ArduboyPlaytune.h>
+#endif
 
 #define SCORE_COMPUTER_LEFT                   0
 #define SCORE_COMPUTER_TOP                    0
@@ -17,7 +19,7 @@ Sprites sprites;
 #define SCORE_PLAYER_HEIGHT                   SCORE_COMPUTER_HEIGHT
 
 #define BONES_COUNT                           28
-#define BONES_INITIAL_COUNT                   2
+#define BONES_INITIAL_COUNT                   7
 
 #define PLAYER_COMPUTER                       0
 #define PLAYER_HUMAN                          1
@@ -101,6 +103,11 @@ Sprites sprites;
 #define MAX_X_LANDSCAPE                       128
 #define MAX_Y_LANDSCAPE                       64
 
+Arduboy2 arduboy;  
+Sprites sprites;
+#ifdef SOUNDS
+  ArduboyPlaytune tunes(arduboy.audio.enabled);
+#endif
                                                     // The 'bones_ref' array contains an element for each bone in a standard
                                                     // 28 bone set.  Arrays that represent players hands, bones available or 
                                                     // bones played all contain indexes that point to this array.
@@ -128,14 +135,12 @@ byte bones_available_idx = 0;                       // points to an entry in the
 byte bones_played[BONES_COUNT] = {0};		            // Array of bones played. Again, each array value points to an entry
 byte bones_played_idx = 0;                          // in the 'bones_ref' array.
 
-
 byte players_hand[2][BONES_COUNT] = {0};	          // Multi-dimensional array that holds the two player's hand.  Bones 
 byte players_hand_idx[2] = {0};                     // will fill the lowest positions in the array - when a bone is played
                                                     // from a hand, the bones are shuffled to the 'left' of the array.
                                                     // The 'players_hand_idx[]' indicates the number of bones in each hand.  
 
 byte players_score[2] = {0};				                // Players score.
-
 
                                                     // When making a move, the player must select a bone from their hand
                                                     // followed by a position on the board.  Alternatively, they can select
@@ -187,6 +192,12 @@ void setup() {
   arduboy.setFrameRate(30);
   arduboy.setTextWrap(true, BONES_GRAVEYARD_X + 2, MAX_X_LANDSCAPE);
   arduboy.setTextVertSpacing(12);
+
+#ifdef SOUNDS
+  arduboy.audio.on();
+  tunes.initChannel(PIN_SPEAKER_1);
+  tunes.initChannel(PIN_SPEAKER_2);
+#endif
 
 }
 
