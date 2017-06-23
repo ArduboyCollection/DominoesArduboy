@@ -99,10 +99,10 @@ The computer will attempt to (in order) :
 ## The Code
 
 I have included two major flags in the code as shown below:
-
+```
 #define NO_SOUNDS
 #define ANIMATIONS
-
+```
 Altering them to include sounds (by removing the NO_ prefix) or exclude animations (by adding NO_ or some other prefix / suffix) will alter what gets included.  As it stands, their are no actual sounds in the application - maybe someone can assist with some appropriate sound effects - but there are animations.  Attempting to include both exceeds the available memory - without having even defined any sound effects ! - and will require some additional work to reduce the program size.
 
 ## Task List
