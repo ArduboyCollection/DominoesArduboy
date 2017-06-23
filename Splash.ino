@@ -73,12 +73,14 @@ void drawSplash_Loop() {
   // Play welcome tune ..
   
   tunes.tone(1047,300);
-  tunes.tone(1047,300);
-  tunes.tone(1047,300);
+  
 #endif
+
+#ifdef ANIMATIONS
 
   DelayOrButtonPress(SPLASH_DELAY_BEFORE_PROMPT);
 
+#endif
   
   // Render 'Press A' prompt ..
   
