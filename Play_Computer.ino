@@ -96,7 +96,7 @@ void computersHand_Loop() {
       
     }
     
-    delay(100);
+    arduboy.delayShort(100);
   
   }
 

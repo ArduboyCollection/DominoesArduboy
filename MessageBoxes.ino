@@ -155,7 +155,7 @@ void drawMessageBox(String message, byte lines, bool waitForButtonPress) {
 
 void drawMessageBox(String message, byte lines, bool waitForButtonPress, byte renderScore) {
 
-  delay(MESSAGE_BOX_DELAY_INIT);
+  arduboy.delayShort(MESSAGE_BOX_DELAY_INIT);
 
   arduboy.fillRect(BONES_GRAVEYARD_X, BONES_GRAVEYARD_Y, BONES_GRAVEYARD_X_MAX, BONES_GRAVEYARD_Y_MAX, BLACK);
   drawHorizontalDottedLine(MESSAGE_BOX_X, MESSAGE_BOX_X_MAX, MESSAGE_BOX_Y);
