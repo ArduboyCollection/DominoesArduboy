@@ -48,6 +48,7 @@ void computersHand_Loop() {
         if (bones_available_idx > 0) {
 
           players_hand[PLAYER_COMPUTER][players_hand_idx[PLAYER_COMPUTER]] = bones_available[bones_available_idx];
+          //              1234567890A1234567890A1234567890A
           drawMessageBox("I will draw  a bone.", 2, false);
 
           players_hand_idx[PLAYER_COMPUTER] = players_hand_idx[PLAYER_COMPUTER] + 1;
@@ -63,12 +64,14 @@ void computersHand_Loop() {
 
           if (gameState == STATE_GAME_PLAY_COMPUTER) {
 
-            drawMessageBox("I cannot go. I will have to pass.", 3, true);
+            //              1234567890A1234567890A1234567890A
+            drawMessageBox("I can't go.I will haveto pass.", 3, true);
             gameState == STATE_GAME_PLAY_HUMAN_HAND_SEL;
 
           }
           else {
 
+            //              1234567890A1234567890A1234567890A
             drawMessageBox("No one can play. This is a draw.", 3, true);
 
           }
