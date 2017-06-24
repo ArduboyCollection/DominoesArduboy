@@ -3,7 +3,8 @@
 #define ANIMATIONS
 #define NO_SCREENSHOTS
 
-#include "Arduboy\Arduboy2.h"
+#include "Arduboy2.h"
+
 #ifdef SOUNDS
 #include <ArduboyPlaytune.h>
 #endif
