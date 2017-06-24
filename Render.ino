@@ -123,6 +123,12 @@ void renderPlayerScore(byte player, bool highlight) {
     }
     else {
       
+#ifdef SOUNDS
+  
+      sound.tone(NOTE_C3,50, NOTE_D3,50, NOTE_E3,50);
+
+#endif 
+      
       arduboy.fillRect(SCORE_COMPUTER_LEFT, SCORE_COMPUTER_TOP, SCORE_COMPUTER_WIDTH, SCORE_COMPUTER_HEIGHT, WHITE);
       sprites.drawErase(SCORE_COMPUTER_LEFT + 1, SCORE_COMPUTER_TOP, digits[player_score_0 / 100], frame);
       player_score_0 = player_score_0 - (player_score_0 / 100) * 100;
@@ -136,7 +142,6 @@ void renderPlayerScore(byte player, bool highlight) {
   if (player == PLAYER_HUMAN) {
 
     if (!highlight) {
-      
       arduboy.fillRect(SCORE_PLAYER_LEFT, SCORE_PLAYER_TOP, SCORE_PLAYER_WIDTH, SCORE_PLAYER_HEIGHT, BLACK);
       sprites.drawOverwrite(SCORE_PLAYER_LEFT + 1, SCORE_PLAYER_TOP, digits[player_score_1 / 100], frame);
       player_score_1 = player_score_1 - (player_score_1 / 100) * 100;
@@ -145,6 +150,12 @@ void renderPlayerScore(byte player, bool highlight) {
       
     }
     else {
+      
+#ifdef SOUNDS
+  
+      sound.tone(NOTE_C4,30, NOTE_D4,30, NOTE_E4,30);
+
+#endif 
 
       arduboy.fillRect(SCORE_PLAYER_LEFT, SCORE_PLAYER_TOP, SCORE_PLAYER_WIDTH, SCORE_PLAYER_HEIGHT, WHITE);
       sprites.drawErase(SCORE_PLAYER_LEFT + 1, SCORE_PLAYER_TOP, digits[player_score_1 / 100], frame);

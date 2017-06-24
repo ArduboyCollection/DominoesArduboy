@@ -592,7 +592,8 @@ boolean isAnyoneOut() {
         renderPlayersHand(players_hand_highlight_idx);
 
         players_score[PLAYER_COMPUTER] = players_score[PLAYER_COMPUTER] + handValue(1);
-        drawMessageBox("I have played all my  bones.", 3, true, PLAYER_COMPUTER);
+        //              1234567890A1234567890A1234567890A
+        drawMessageBox("I have used up all my   bones.", 3, true, PLAYER_COMPUTER);
         gameState = STATE_GAME_PLAY_GAME;
         return true;
 
@@ -603,6 +604,7 @@ boolean isAnyoneOut() {
         renderPlayersHand(players_hand_highlight_idx);
 
         players_score[PLAYER_HUMAN] = players_score[PLAYER_HUMAN] + handValue(PLAYER_COMPUTER);
+        //              1234567890A1234567890A1234567890A
         drawMessageBox("You have played all ofyour bones.", 3, true, PLAYER_HUMAN);
         gameState = STATE_GAME_PLAY_GAME;
         return true;

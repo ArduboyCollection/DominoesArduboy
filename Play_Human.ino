@@ -20,17 +20,18 @@ void playersHand_Loop() {
     
     if (!canPlay(PLAYER_HUMAN) && bones_available_idx == 0) {
 
-      gameState = (canPlay(PLAYER_COMPUTER) && !canPlay(PLAYER_HUMAN) ? gameState : STATE_GAME_PLAY_GAME);
+      gameState = (canPlay(PLAYER_COMPUTER) && !canPlay(PLAYER_HUMAN) ? STATE_GAME_PLAY_COMPUTER : STATE_GAME_PLAY_GAME);
 
-      if (gameState >= STATE_GAME_PLAY_HUMAN_HAND_SEL) {
+      if (gameState == STATE_GAME_PLAY_COMPUTER) {
 
-        arduboy.delayShort(1000);
-        drawMessageBox("You cannot play a bone. You must pass.", 3, true);
+        //              1234567890A1234567890A1234567890A
+        drawMessageBox("You cannot play a boneand pass.", 3, true);
 
       }
       else {
 
-        drawMessageBox("No one can play a bone. Its a stale-mate.", 3, true);
+        //              1234567890A1234567890A1234567890A
+        drawMessageBox("Its a stalemate. Roundover.", 3, true);
 
       }
       

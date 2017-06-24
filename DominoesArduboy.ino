@@ -1,12 +1,16 @@
-#define NO_DEBUG
-#define NO_SOUNDS
+#define SOUNDS
 #define ANIMATIONS
 #define NO_SCREENSHOTS
+
+#define NO_DEBUG
+  #ifdef  DEBUG
+  #define DEBUG_PLAYER_CANNOT_PLAY
+  #endif
 
 #include "Arduboy2.h"
 
 #ifdef SOUNDS
-#include <ArduboyPlaytune.h>
+#include <ArduboyTones.h>
 #endif
 
 #define SCORE_COMPUTER_LEFT                   0
@@ -107,7 +111,7 @@
 Arduboy2 arduboy;  
 Sprites sprites;
 #ifdef SOUNDS
-  ArduboyPlaytune tunes(arduboy.audio.enabled);
+  ArduboyTones sound(arduboy.audio.enabled);
 #endif
                                                     // The 'bones_ref' array contains an element for each bone in a standard
                                                     // 28 bone set.  Arrays that represent players hands, bones available or 
@@ -182,6 +186,7 @@ byte boardMode = BOARD_MODE_NO_BONES_PLAYED;        // Stores the current mode o
 
 byte frame = 0;
 byte playersTurn = PLAYER_HUMAN;                    // Used to retain the players turn at the end of each round.
+bool sounds_on = false;
 
 
 /* ----------------------------------------------------------------------------
@@ -196,8 +201,8 @@ void setup() {
 
 #ifdef SOUNDS
   arduboy.audio.on();
-  tunes.initChannel(PIN_SPEAKER_1);
-  tunes.initChannel(PIN_SPEAKER_2);
+//  tunes.initChannel(PIN_SPEAKER_1);
+//  tunes.initChannel(PIN_SPEAKER_2);
 #endif
 
 }
@@ -295,7 +300,17 @@ void playGame_Loop() {
 
     shuffleBones();
     dealBones();
-  
+
+#ifdef DEBUG_PLAYER_CANNOT_PLAY
+    bones_available_idx = 0;
+    players_hand[PLAYER_COMPUTER][0] = 26;  // 5:6
+    players_hand[PLAYER_COMPUTER][1] = 27;  // 6:6
+    players_hand[PLAYER_HUMAN][0] = 25;     // 5:5 
+    players_hand[PLAYER_HUMAN][1] = 0;      // 0:0
+    players_hand_idx[PLAYER_COMPUTER] = 2;
+    players_hand_idx[PLAYER_HUMAN] = 2;
+#endif
+
     
     // Render the screen ..
     
