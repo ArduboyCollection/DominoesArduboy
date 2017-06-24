@@ -472,9 +472,9 @@ boolean canEitherPlayerMove() {
  */
 void flashRedLED() {
 
-  arduboy.digitalWriteRGB(64,0,0);
+  arduboy.digitalWriteRGB(RED_LED, RGB_ON);
   arduboy.delayShort(100);
-  arduboy.digitalWriteRGB(0,0,0);
+  arduboy.digitalWriteRGB(RED_LED, RGB_OFF);
 
 }
 
@@ -485,11 +485,9 @@ void flashRedLED() {
  */
 void flashGreenLED() {
  
-  arduboy.digitalWriteRGB(64,0,0);
-//  arduboy.setRGBled(0,64,0);
+  arduboy.digitalWriteRGB(GREEN_LED, RGB_ON);
   arduboy.delayShort(100);
-  arduboy.digitalWriteRGB(0,0,0);
-//  arduboy.setRGBled(0,0,0);
+  arduboy.digitalWriteRGB(GREEN_LED, RGB_OFF);
 
 }
 
@@ -616,11 +614,18 @@ boolean isAnyoneOut() {
   }
 
   return false;
+  
 }
 
+/* ----------------------------------------------------------------------------
+ *  Sends a screen shot to the programmer.
+ *  
+ */
 #ifdef SCREENSHOTS
+
 void screenShot() {
   Serial.write(arduboy.getBuffer(), 128 * 64 / 8);
   arduboy.delayShort(1000);
 }
+
 #endif
