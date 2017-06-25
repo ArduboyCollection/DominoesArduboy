@@ -4,7 +4,7 @@
 
 #define NO_DEBUG
   #ifdef  DEBUG
-  #define DEBUG_PLAYER_CANNOT_PLAY
+    #define DEBUG_PLAYER_CANNOT_PLAY
   #endif
 
 #include "Arduboy2.h"
@@ -186,7 +186,6 @@ byte boardMode = BOARD_MODE_NO_BONES_PLAYED;        // Stores the current mode o
 
 byte frame = 0;
 byte playersTurn = PLAYER_HUMAN;                    // Used to retain the players turn at the end of each round.
-bool sounds_on = false;
 
 
 /* ----------------------------------------------------------------------------
@@ -194,15 +193,13 @@ bool sounds_on = false;
  */
 void setup() {
 
-  arduboy.boot();
+  arduboy.begin();
   arduboy.setFrameRate(30);
   arduboy.setTextWrap(true, BONES_GRAVEYARD_X + 2, MAX_X_LANDSCAPE);
   arduboy.setTextVertSpacing(12);
 
 #ifdef SOUNDS
-  arduboy.audio.on();
-//  tunes.initChannel(PIN_SPEAKER_1);
-//  tunes.initChannel(PIN_SPEAKER_2);
+  arduboy.audio.begin();
 #endif
 
 }

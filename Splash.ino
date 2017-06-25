@@ -188,9 +188,8 @@ void drawSplash_Loop() {
 
 #ifdef SOUNDS   
     if (arduboy.pressed(B_BUTTON)) { 
- Serial.print("b ");     
- Serial.println(sounds_on);
-      if (sounds_on) {
+
+      if (arduboy.audio.enabled()) {
       
         arduboy.audio.off(); 
         arduboy.fillCircle(SPLASH_SOUND_PROMPT_CIRCLE_X, SPLASH_SOUND_PROMPT_CIRCLE_Y, SPLASH_SOUND_PROMPT_CIRCLE_RAD, BLACK);
@@ -214,7 +213,6 @@ void drawSplash_Loop() {
         
       }
 
-      sounds_on = !sounds_on;
       arduboy.display();
         
     }
