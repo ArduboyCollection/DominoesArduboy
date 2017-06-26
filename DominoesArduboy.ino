@@ -111,6 +111,7 @@
 
 Arduboy2Ext arduboy;  
 Sprites sprites;
+
 #ifdef SOUNDS
   ArduboyTones sound(arduboy.audio.enabled);
 #endif

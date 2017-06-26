@@ -76,6 +76,10 @@ const byte PROGMEM hourglass[] = {
 #define MESSAGE_BOX_Y_2_LINE        MESSAGE_BOX_Y + 11
 #define MESSAGE_BOX_Y_3_LINE        MESSAGE_BOX_Y + 7
 
+#define MESSAGE_BOX_EXIT_CIRCLE_X   115
+#define MESSAGE_BOX_EXIT_CIRCLE_Y   38
+#define MESSAGE_BOX_EXIT_CIRCLE_RAD 5
+
 
 /* ----------------------------------------------------------------------------
     Render a message box with an animated hourglass.
@@ -197,16 +201,13 @@ boolean exitGame() {
   drawHorizontalDottedLine(MESSAGE_BOX_X, MESSAGE_BOX_X_MAX, MESSAGE_BOX_Y_MAX);
   arduboy.setCursor(MESSAGE_BOX_X + 2, MESSAGE_BOX_Y_3_LINE);
   arduboy.print("Leave game and return?");
-
-  arduboy.display();
-  arduboy.delayShort(500);
     
   arduboy.setCursor(MESSAGE_BOX_X + 2, MESSAGE_BOX_Y_3_LINE + 28);
   arduboy.print("Confirm");
 
-  arduboy.fillCircle(115, 38, 5, WHITE);
+  arduboy.fillCircle(MESSAGE_BOX_EXIT_CIRCLE_X, MESSAGE_BOX_EXIT_CIRCLE_Y, MESSAGE_BOX_EXIT_CIRCLE_RAD, WHITE);
   
-  arduboy.setCursor(110 + 3, 35);
+  arduboy.setCursor(MESSAGE_BOX_EXIT_CIRCLE_X - 2, MESSAGE_BOX_EXIT_CIRCLE_Y - 3);
   arduboy.setTextColor(BLACK);
   arduboy.setTextBackground(WHITE);
   arduboy.print("B");
@@ -215,6 +216,9 @@ boolean exitGame() {
   arduboy.setTextBackground(BLACK);
   arduboy.display();
 
+  arduboy.delayShort(250);
+
   return (WaitForButtonPress() == B_BUTTON ? true : false);
 
 }
+

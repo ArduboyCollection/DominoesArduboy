@@ -518,6 +518,8 @@ void DelayOrButtonPress(byte delayVal) {
  */
 int WaitForButtonPress() {
   
+  arduboy.pollButtons();
+  
   while (true) {
 
     if (arduboy.pressed(A_BUTTON)) { 

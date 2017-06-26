@@ -142,7 +142,6 @@ void drawSplash_Loop() {
 
 #endif
 
-
 #ifdef SOUNDS
 
 
@@ -165,15 +164,16 @@ void drawSplash_Loop() {
   
   arduboy.setCursor(SPLASH_SOUND_PROMPT_X, SPLASH_SOUND_PROMPT_Y);
   arduboy.print("Sound");
-  arduboy.fillCircle(SPLASH_SOUND_PROMPT_CIRCLE_X, SPLASH_SOUND_PROMPT_CIRCLE_Y, SPLASH_SOUND_PROMPT_CIRCLE_RAD, WHITE);
-  
-  arduboy.setCursor(SPLASH_SOUND_PROMPT_CIRCLE_X - 2, SPLASH_SOUND_PROMPT_Y);
-  arduboy.setTextColor(BLACK);
-  arduboy.setTextBackground(WHITE);
-  arduboy.print("B");
 
-  arduboy.setTextColor(WHITE);
-  arduboy.setTextBackground(BLACK);
+  
+  if (arduboy.audio.enabled()) {
+
+    renderBEnabled();
+    
+  }
+  else {
+    renderBDisabled();
+  }
 
 #endif
 
@@ -192,24 +192,16 @@ void drawSplash_Loop() {
       if (arduboy.audio.enabled()) {
       
         arduboy.audio.off(); 
-        arduboy.fillCircle(SPLASH_SOUND_PROMPT_CIRCLE_X, SPLASH_SOUND_PROMPT_CIRCLE_Y, SPLASH_SOUND_PROMPT_CIRCLE_RAD, BLACK);
-        arduboy.setCursor(SPLASH_SOUND_PROMPT_CIRCLE_X - 2, SPLASH_SOUND_PROMPT_Y);
-        arduboy.setTextColor(WHITE);
-        arduboy.setTextBackground(BLACK);
-        arduboy.print("B");
-        arduboy.drawCircle(SPLASH_SOUND_PROMPT_CIRCLE_X, SPLASH_SOUND_PROMPT_CIRCLE_Y, SPLASH_SOUND_PROMPT_CIRCLE_RAD, WHITE);
+        arduboy.audio.saveOnOff();
+        renderBDisabled();
 
       }
       else {
       
         arduboy.audio.on(); 
-        arduboy.fillCircle(SPLASH_SOUND_PROMPT_CIRCLE_X, SPLASH_SOUND_PROMPT_CIRCLE_Y, SPLASH_SOUND_PROMPT_CIRCLE_RAD, WHITE);
-        arduboy.setCursor(SPLASH_SOUND_PROMPT_CIRCLE_X - 2, SPLASH_SOUND_PROMPT_Y);
-        arduboy.setTextColor(BLACK);
-        arduboy.setTextBackground(WHITE);
-        arduboy.print("B");
-        arduboy.setTextColor(WHITE);
-        arduboy.setTextBackground(BLACK);
+        arduboy.audio.saveOnOff();
+        renderBEnabled();
+        sound.tones(starwars);
         
       }
 
@@ -218,7 +210,7 @@ void drawSplash_Loop() {
     }
 #endif
     
-    arduboy.delayShort(100);
+    arduboy.delayShort(200);
 
 #ifdef SCREENSHOTS
   //screenShot();
@@ -226,6 +218,44 @@ void drawSplash_Loop() {
 
   }
 
+
+  // Reset the text colours ..
+  
+  arduboy.setTextColor(WHITE);
+  arduboy.setTextBackground(BLACK);
+
   gameState = STATE_GAME_PLAY_GAME;
   
 }
+
+
+/* ----------------------------------------------------------------------------
+ *  Render a white (B) inside a hollow circle.
+ *  
+ */
+void renderBDisabled() {
+
+  arduboy.fillCircle(SPLASH_SOUND_PROMPT_CIRCLE_X, SPLASH_SOUND_PROMPT_CIRCLE_Y, SPLASH_SOUND_PROMPT_CIRCLE_RAD, BLACK);
+  arduboy.setCursor(SPLASH_SOUND_PROMPT_CIRCLE_X - 2, SPLASH_SOUND_PROMPT_Y);
+  arduboy.setTextColor(WHITE);
+  arduboy.setTextBackground(BLACK);
+  arduboy.print("B");
+  arduboy.drawCircle(SPLASH_SOUND_PROMPT_CIRCLE_X, SPLASH_SOUND_PROMPT_CIRCLE_Y, SPLASH_SOUND_PROMPT_CIRCLE_RAD, WHITE);
+  
+}
+
+
+/* ----------------------------------------------------------------------------
+ *  Render a black (B) on a white circle background.
+ *  
+ */
+void renderBEnabled() {
+
+  arduboy.fillCircle(SPLASH_SOUND_PROMPT_CIRCLE_X, SPLASH_SOUND_PROMPT_CIRCLE_Y, SPLASH_SOUND_PROMPT_CIRCLE_RAD, WHITE);
+  arduboy.setCursor(SPLASH_SOUND_PROMPT_CIRCLE_X - 2, SPLASH_SOUND_PROMPT_Y);
+  arduboy.setTextColor(BLACK);
+  arduboy.setTextBackground(WHITE);
+  arduboy.print("B");
+
+}
+
