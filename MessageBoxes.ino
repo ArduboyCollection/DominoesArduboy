@@ -144,9 +144,8 @@ void drawMessageBox_WithHourglass(byte boneIdx) {
 
 
 /* ----------------------------------------------------------------------------
-    Render a simple message.
-
-*/
+ *  Render a simple message.
+ */
 void drawMessageBox(String message, byte lines, bool waitForButtonPress) {
 
   drawMessageBox(message, lines, waitForButtonPress, NOTHING);
@@ -185,5 +184,37 @@ void drawMessageBox(String message, byte lines, bool waitForButtonPress, byte re
     DelayOrButtonPress((renderScore == NOTHING ? MESSAGE_BOX_DELAY : MESSAGE_BOX_DELAY_SHORT));
 
   }
+
+}
+
+/* ----------------------------------------------------------------------------
+ *  Render an exit message box.
+ */
+boolean exitGame() {
+
+  arduboy.fillRect(BONES_GRAVEYARD_X, BONES_GRAVEYARD_Y, BONES_GRAVEYARD_X_MAX, BONES_GRAVEYARD_Y_MAX, BLACK);
+  drawHorizontalDottedLine(MESSAGE_BOX_X, MESSAGE_BOX_X_MAX, MESSAGE_BOX_Y);
+  drawHorizontalDottedLine(MESSAGE_BOX_X, MESSAGE_BOX_X_MAX, MESSAGE_BOX_Y_MAX);
+  arduboy.setCursor(MESSAGE_BOX_X + 2, MESSAGE_BOX_Y_3_LINE);
+  arduboy.print("Leave game and return?");
+
+  arduboy.display();
+  arduboy.delayShort(500);
+    
+  arduboy.setCursor(MESSAGE_BOX_X + 2, MESSAGE_BOX_Y_3_LINE + 28);
+  arduboy.print("Confirm");
+
+  arduboy.fillCircle(115, 38, 5, WHITE);
+  
+  arduboy.setCursor(110 + 3, 35);
+  arduboy.setTextColor(BLACK);
+  arduboy.setTextBackground(WHITE);
+  arduboy.print("B");
+
+  arduboy.setTextColor(WHITE);
+  arduboy.setTextBackground(BLACK);
+  arduboy.display();
+
+  return (WaitForButtonPress() == B_BUTTON ? true : false);
 
 }

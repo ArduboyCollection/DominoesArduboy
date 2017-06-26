@@ -100,6 +100,18 @@ void playersHand_Loop() {
             }
             
           }
+          
+          if (arduboy.justPressed(B_BUTTON)) { 
+
+            if (exitGame()) {
+              gameState = STATE_GAME_INTRO;
+            }
+            else {
+              renderGraveyard(NOTHING, players_hand_highlight_idx);
+//              renderBoard(board_highlighted_idx);
+            }
+            
+          }
 
           break;
 
@@ -175,7 +187,7 @@ void playersHand_Loop() {
             renderGraveyard(NOTHING, players_hand_highlight_idx);
               
           }
-
+          
           break;
 
         case STATE_GAME_PLAY_HUMAN_BOARD_SEL:
