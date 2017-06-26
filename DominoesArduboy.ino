@@ -7,7 +7,8 @@
     #define DEBUG_PLAYER_CANNOT_PLAY
   #endif
 
-#include "Arduboy2.h"
+#include <Arduboy2.h>
+#include "Arduboy2Ext.h"
 
 #ifdef SOUNDS
 #include <ArduboyTones.h>
@@ -108,7 +109,7 @@
 #define MAX_X_LANDSCAPE                       128
 #define MAX_Y_LANDSCAPE                       64
 
-Arduboy2 arduboy;  
+Arduboy2Ext arduboy;  
 Sprites sprites;
 #ifdef SOUNDS
   ArduboyTones sound(arduboy.audio.enabled);

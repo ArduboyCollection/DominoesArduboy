@@ -513,12 +513,23 @@ void DelayOrButtonPress(byte delayVal) {
 /* ----------------------------------------------------------------------------
  *  Wait for a button press. 
  *  
+ *  Returns the pressed button to the caller.
+ *  
  */
-void WaitForButtonPress() {
+int WaitForButtonPress() {
   
   while (true) {
-    if (arduboy.pressed(A_BUTTON) || arduboy.pressed(B_BUTTON)) { break; }
+
+    if (arduboy.pressed(A_BUTTON)) { 
+      return A_BUTTON;
+    }
+    
+    if (arduboy.pressed(B_BUTTON)) { 
+      return B_BUTTON;
+    }
+    
     arduboy.delayShort(100);
+    
   }
 
 }
