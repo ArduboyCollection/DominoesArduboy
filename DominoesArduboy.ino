@@ -134,43 +134,43 @@ byte bones_ref[BONES_COUNT] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
                             //   27
                                0x66};
                                
-byte bones_available[BONES_COUNT] = {0};	          // Array of bones that the players can draw from. Each array value 
+byte bones_available[BONES_COUNT] = {0};            // Array of bones that the players can draw from. Each array value 
 byte bones_available_idx = 0;                       // points to an entry in the 'bones_ref' array which contains the 
                                                     // actual bone details (left and right pip values). The next available
-											                              // bone is indicated by the 'bones_available_idx' variable.
+                                                    // bone is indicated by the 'bones_available_idx' variable.
 
-byte bones_played[BONES_COUNT] = {0};		            // Array of bones played. Again, each array value points to an entry
+byte bones_played[BONES_COUNT] = {0};                // Array of bones played. Again, each array value points to an entry
 byte bones_played_idx = 0;                          // in the 'bones_ref' array.
 
-byte players_hand[2][BONES_COUNT] = {0};	          // Multi-dimensional array that holds the two player's hand.  Bones 
+byte players_hand[2][BONES_COUNT] = {0};            // Multi-dimensional array that holds the two player's hand.  Bones 
 byte players_hand_idx[2] = {0};                     // will fill the lowest positions in the array - when a bone is played
                                                     // from a hand, the bones are shuffled to the 'left' of the array.
                                                     // The 'players_hand_idx[]' indicates the number of bones in each hand.  
 
-byte players_score[2] = {0};				                // Players score.
+byte players_score[2] = {0};                        // Players score.
 
                                                     // When making a move, the player must select a bone from their hand
                                                     // followed by a position on the board.  Alternatively, they can select
                                                     // a bone from the graveyard to add to their hand (although in reality
                                                     // they will always get the next bone from the 'bones_available' array.
 
-byte players_hand_visible_idx = 0;			            // Only six player's bones are visible at one time and the player can
+byte players_hand_visible_idx = 0;                  // Only six player's bones are visible at one time and the player can
                                                     // scroll through these.  The 'players_hand_visible_idx' defines which
                                                     // should be displayed in the left most position on the display.
-byte players_hand_highlight_idx = 0;      	        // Used to store the currently selected bone.
+byte players_hand_highlight_idx = 0;                // Used to store the currently selected bone.
 byte graveyard_highlight_idx = NOTHING;             // Used to store the currently selected graveyard bone.
 byte board_highlighted_idx = NOTHING;               // Used to store the currently seelcted board location.  
 
-byte boneCounts_Overall[7] = {0};         	        // Used to count how many of each bone is visible on the board.
-byte boneCounts_Inhand[7] = {0};          	        // Used to count how many of each bone is visible in the players hand.
+byte boneCounts_Overall[7] = {0};                   // Used to count how many of each bone is visible on the board.
+byte boneCounts_Inhand[7] = {0};                    // Used to count how many of each bone is visible in the players hand.
 
-byte bone_n = NOTHING;						                  // Stores the index reference (to bones_ref) for each board position.
+byte bone_n = NOTHING;                              // Stores the index reference (to bones_ref) for each board position.
 byte bone_s = NOTHING;
 byte bone_e = NOTHING;
 byte bone_w = NOTHING;
 byte bone_c = NOTHING;
 
-byte bone_n_pips_inner = NOTHING;			              // Stores the inner and outer PIP count for each board position.
+byte bone_n_pips_inner = NOTHING;                    // Stores the inner and outer PIP count for each board position.
 byte bone_s_pips_inner = NOTHING;
 byte bone_e_pips_inner = NOTHING;
 byte bone_w_pips_inner = NOTHING;

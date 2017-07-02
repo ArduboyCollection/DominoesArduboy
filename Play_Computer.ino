@@ -30,7 +30,7 @@ void computersHand_Loop() {
 
 
       // If not, what move will drive the PIP count down?
-    	
+      
       lowestPossibleScore(PLAYER_COMPUTER, &boneIdx, &boneDirection);
         
       if (boneIdx != NOTHING) {
@@ -42,7 +42,7 @@ void computersHand_Loop() {
       }
       else {
 
-    	  
+        
         // No bones can be played so draw ..
 
         if (bones_available_idx > 0) {

@@ -4,10 +4,10 @@
  */
 void shuffleBones() {
 
-	
+  
   // Clear the bones_played array and populate the bones_available array with 
   // a sequential number between 0 and BONES_COUNT (26).
-	
+  
   for (byte x = 0; x < BONES_COUNT; x++) {
       
     bones_available[x] = x;
@@ -39,7 +39,7 @@ void shuffleBones() {
  *  
  */
 void dealBones() {
-	
+  
   memset(players_hand[0], 0, (sizeof(players_hand[0]) / sizeof(players_hand[0][0])));
   memset(players_hand_idx, 0, (sizeof(players_hand_idx) / sizeof(players_hand_idx[0])));
   
@@ -401,10 +401,10 @@ boolean canPlayBone(byte boneId) {
       return true;
     }
   
-    if (bone_e_pips_outer == NOTHING && (bone_c_pips_outer == leftPips_ByBoneId(boneId) || bone_c_pips_outer == rightPips_ByBoneId(boneId))) 	  { return true; }  
-    if (bone_e_pips_outer != NOTHING && (bone_e_pips_outer == leftPips_ByBoneId(boneId) || bone_e_pips_outer == rightPips_ByBoneId(boneId))) 	  { return true; }
-    if (bone_w_pips_outer == NOTHING && (bone_c_pips_inner == leftPips_ByBoneId(boneId) || bone_c_pips_inner == rightPips_ByBoneId(boneId))) 	  { return true; }
-    if (bone_w_pips_outer != NOTHING && (bone_w_pips_outer == leftPips_ByBoneId(boneId) || bone_w_pips_outer == rightPips_ByBoneId(boneId))) 	  { return true; }
+    if (bone_e_pips_outer == NOTHING && (bone_c_pips_outer == leftPips_ByBoneId(boneId) || bone_c_pips_outer == rightPips_ByBoneId(boneId)))     { return true; }  
+    if (bone_e_pips_outer != NOTHING && (bone_e_pips_outer == leftPips_ByBoneId(boneId) || bone_e_pips_outer == rightPips_ByBoneId(boneId)))     { return true; }
+    if (bone_w_pips_outer == NOTHING && (bone_c_pips_inner == leftPips_ByBoneId(boneId) || bone_c_pips_inner == rightPips_ByBoneId(boneId)))     { return true; }
+    if (bone_w_pips_outer != NOTHING && (bone_w_pips_outer == leftPips_ByBoneId(boneId) || bone_w_pips_outer == rightPips_ByBoneId(boneId)))     { return true; }
 
     if (boardMode == BOARD_MODE_X_AXIS_PLAYED) {
   
