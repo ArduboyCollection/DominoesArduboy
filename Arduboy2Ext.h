@@ -1,6 +1,5 @@
 #ifndef ARDUBOY2EXT_H
 #define ARDUBOY2EXT_H
-#endif
 
 #include "Arduboy2.h"
 
@@ -63,6 +62,4 @@ class Arduboy2Ext : public Arduboy2 {
   virtual size_t write(uint8_t);
   
 };
-  
-
-
+#endif
