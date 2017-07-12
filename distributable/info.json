@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 2,
+  "title": "Dominoes",
+  "description": "A dominoes 'All Fives' game.",
+  "author": "Filmote",
+  "version": "1.0.0",
+  "date": "2017-06-30",
+  "genre": "Puzzle",
+  "publisher": "Filmote",
+  "idea": "Filmote",
+  "code": "Filmote",
+  "art": "Filmote",
+  "sound": "",
+  "url": "https://github.com/filmote/DominoesArduboy",
+  "sourceUrl": "https://github.com/filmote/DominoesArduboy",
+  "email": "simon@bloggingadeadhorse.com",
+  "companion": "",
+  "banner": "banner.png",
+  "screenshots": [
+    {
+      "title": "Title",
+      "filename": "screenshot00.png"
+    },
+    {
+      "title": "XXX",
+      "filename": "screenshot01.png"
+    }
+  ]
+}
