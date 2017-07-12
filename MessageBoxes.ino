@@ -69,8 +69,8 @@ const byte PROGMEM hourglass[] = {
 #define MESSAGE_BOX_DELAY           20
 #define MESSAGE_BOX_DELAY_SHORT     5
 
-#define MESSAGE_BOX_X     		      BONES_GRAVEYARD_X
-#define MESSAGE_BOX_X_MAX  		      BONES_GRAVEYARD_X_MAX
+#define MESSAGE_BOX_X               BONES_GRAVEYARD_X
+#define MESSAGE_BOX_X_MAX            BONES_GRAVEYARD_X_MAX
 #define MESSAGE_BOX_Y               BONES_GRAVEYARD_Y
 #define MESSAGE_BOX_Y_MAX           BONES_GRAVEYARD_Y_MAX - 4
 #define MESSAGE_BOX_Y_2_LINE        MESSAGE_BOX_Y + 11
