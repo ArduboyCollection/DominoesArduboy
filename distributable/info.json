@@ -18,12 +18,32 @@
   "banner": "banner.png",
   "screenshots": [
     {
-      "title": "Title",
+      "title": "Splash Screen",
       "filename": "screenshot00.png"
     },
     {
-      "title": "XXX",
+      "title": "Selecting a bone from the player's hand.",
       "filename": "screenshot01.png"
+    },
+    {
+      "title": "Playing a bone on the board.",
+      "filename": "screenshot02.png"
+    },
+    {
+      "title": "Selecting a bone from the graveyard.",
+      "filename": "screenshot03.png"
+    },
+    {
+      "title": "Computer's turn .. waiting.",
+      "filename": "screenshot04.png"
+    },
+    {
+      "title": "Computer's turn .. decision made.",
+      "filename": "screenshot05.png"
+    },
+    {
+      "title": "Playing all four sides of the spinner.",
+      "filename": "screenshot06.png"
     }
   ]
 }
