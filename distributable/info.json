@@ -45,5 +45,12 @@
       "title": "Playing all four sides of the spinner.",
       "filename": "screenshot06.png"
     }
+  ],
+  "binaries": [
+    {
+      "title": "The Game",
+      "filename": "Dominoes.hex",
+      "device": "Arduboy"
+    }
   ]
 }
